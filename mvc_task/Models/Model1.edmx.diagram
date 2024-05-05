@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="cff18006cf4248a8924f50f004b6ee03" Name="Diagram1">
+        <EntityTypeShape EntityType="shraddha_crmModel.Department" Width="1.5" PointX="0.75" PointY="2.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="shraddha_crmModel.Employee" Width="1.5" PointX="3" PointY="1" IsExpanded="true" />
+        <EntityTypeShape EntityType="shraddha_crmModel.Task" Width="1.5" PointX="5.25" PointY="1.25" IsExpanded="true" />
+        <AssociationConnector Association="shraddha_crmModel.FK__Employee__Depart__3A81B327" ManuallyRouted="false" />
+        <AssociationConnector Association="shraddha_crmModel.FK__Employee__Report__3B75D760" ManuallyRouted="false" />
+        <AssociationConnector Association="shraddha_crmModel.FK__Tasks__ApprovedO__403A8C7D" ManuallyRouted="false" />
+        <AssociationConnector Association="shraddha_crmModel.FK__Tasks__ApproverI__3F466844" ManuallyRouted="false" />
+        <AssociationConnector Association="shraddha_crmModel.FK__Tasks__EmployeeI__3E52440B" ManuallyRouted="false" />
+      </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>
