@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
 using System.Web;
+using System.Web.Configuration;
 using System.Web.Mvc;
 using System.Web.Services.Protocols;
 
@@ -11,13 +12,14 @@ namespace mvc_task.Controllers
 {
     public class HomeController : Controller
     {
-        private shraddha_crmEntities1 _dbcontext;
+        private shraddha_crmEntities1 _dbContext;
 
         public HomeController()
         {
-            _dbcontext = new shraddha_crmEntities1();
+            _dbContext = new shraddha_crmEntities1();
         }
 
+        //-------------User Authentication-----------------
         public ActionResult Register()
         {
             return View();
@@ -29,11 +31,11 @@ namespace mvc_task.Controllers
         {
             employee.DepartmentId = 1;
             employee.ReportingPerson = 1;
-            _dbcontext.Employees.Add(employee);
-            _dbcontext.SaveChanges();
+            _dbContext.Employees.Add(employee);
+            _dbContext.SaveChanges();
             employee.EmployeeCode = "SIT-" + employee.EmployeeId;
-            _dbcontext.Entry(employee).State = EntityState.Modified;
-            _dbcontext.SaveChanges();
+            _dbContext.Entry(employee).State = EntityState.Modified;
+            _dbContext.SaveChanges();
             return RedirectToAction("login");
         }
 
@@ -48,7 +50,7 @@ namespace mvc_task.Controllers
         {
             try
             {
-                var obj = _dbcontext.Employees
+                var obj = _dbContext.Employees
                      .Where(user => user.Email == employee.Email && user.Password == employee.Password)
                      .FirstOrDefault();
 
@@ -56,7 +58,7 @@ namespace mvc_task.Controllers
                 {
                     Session["EmpId"] = obj.EmployeeId;
                     Session["Email"] = obj.Email;
-                    return RedirectToAction("Deshboard");
+                    return RedirectToAction("Dashboard");
                 }
                 else
                 {
@@ -71,16 +73,114 @@ namespace mvc_task.Controllers
             }
         }
 
-        public ActionResult Deshboard()
+        public ActionResult ResetPass()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult ResetPass(Employee employee)
+        {
+            if (!ModelState.IsValid)
+            {
+                var empObj = _dbContext.Employees.FirstOrDefault(m =>  m.Email == employee.Email);
+                if(empObj != null)
+                {
+                   empObj.Password = employee.Password;
+
+                   _dbContext.Entry(empObj).State = EntityState.Modified;
+                   _dbContext.SaveChanges();
+
+                    return RedirectToAction("Login");
+                }
+                else
+                {
+                    ModelState.AddModelError("", "Please Enter Registered Email");
+                    return View();
+                }
+            }
+            return View();
+        }
+
+        //-------------------Dashboard-------------------
+        public ActionResult Dashboard()
         {
             if (Session["EmpId"]  != null)
             {
-                return View();
+                var tasks = _dbContext.Tasks.ToList();
+                int empId = (int)Session["EmpId"];
+                var empName = (from e in _dbContext.Employees
+                               where e.EmployeeId == empId
+                               select e.FirstName).FirstOrDefault();
+                ViewBag.EmployeeName = empName;
+                return View(tasks);
             }
             else
             {
                 return RedirectToAction("Login");
             }
+        }
+
+
+        //------------------------Task------------------
+        public ActionResult AddTask()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult AddTask(Task task)
+        {
+            if(ModelState.IsValid)
+            {
+                task.EmployeeId = (int?)Session["EmpId"];
+                task.ApproverId = 1;
+                task.Status = "Pending";
+                task.CreatedOn = DateTime.Today;
+
+                _dbContext.Tasks.Add(task);
+                _dbContext.SaveChanges();
+                return RedirectToAction("Dashboard");
+            }
+            return View();
+        }
+
+
+        //-------------------Employee Detail-----------------
+        public ActionResult ShowEmpDetails()
+        {
+            int id = (int)Session["EmpId"];
+            var employee = _dbContext.Employees.Where(x => x.EmployeeId == id).FirstOrDefault();
+            return View(employee);
+        }
+
+        public ActionResult EditPerDetail(int id)
+        {
+            var employee = _dbContext.Employees.Where(x => x.EmployeeId == id).FirstOrDefault();
+            return View(employee);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult EditPerDetail(Employee employee)
+        {
+            var id = (int)Session["EmpId"];
+            var empObj = _dbContext.Employees.FirstOrDefault(m => m.EmployeeId == id);
+
+            if (empObj != null)
+            { 
+                empObj.Email = employee.Email;
+                empObj.FirstName = employee.FirstName;
+                empObj.LastName = employee.LastName;
+                empObj.DOB = employee.DOB;
+                empObj.Gender = employee.Gender;
+
+                _dbContext.Entry(empObj).State = EntityState.Modified;
+                _dbContext.SaveChanges();
+            }
+            return RedirectToAction("Dashboard");
         }
     }
 }

@@ -11,7 +11,9 @@ namespace mvc_task.Models
 {
     using System;
     using System.Collections.Generic;
-    
+    using System.ComponentModel.DataAnnotations;
+
+    [MetadataType(typeof(TaskMetaData))]
     public partial class Task
     {
         public int TaskID { get; set; }

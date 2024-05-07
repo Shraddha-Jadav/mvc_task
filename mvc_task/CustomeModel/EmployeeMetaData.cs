@@ -36,6 +36,7 @@ namespace mvc_task.Models
         public string LastName { get; set; }
 
         [Display(Name = "DOB", ResourceType = typeof(StringResources))]
+        [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
         [Required(ErrorMessageResourceName = "RequiredError", ErrorMessageResourceType = typeof(StringResources))]
 
         public Nullable<System.DateTime> DOB { get; set; }

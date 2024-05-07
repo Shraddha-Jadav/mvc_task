@@ -1,0 +1,92 @@
+﻿@model IEnumerable<mvc_task.Models.Task>
+
+@{
+    ViewBag.Title = "Deshboard";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="d-flex justify-content-between">
+    <h2>Hello @ViewBag.EmployeeName</h2>
+    <h2>@Html.ActionLink("Details", "ShowEmpDetails", "Home",  new { area = "" }, new { @class = "btn border-primary" })</h2>
+</div>
+<div class="d-flex justify-content-end">
+    @Html.ActionLink("Add Task", "AddTask", "Home", new { area = "" }, new { @class = "btn border-primary" })
+</div>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.TaskDate)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.TaskName)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.TaskDescription)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Status)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.ApprovedOrRejectedOn)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.CreatedOn)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.ModifiedOn)
+        </th>
+        <th>Actions</th>
+    </tr>
+
+    @foreach (var item in Model)
+    {
+        if (item.EmployeeId == (int?)Session["EmpId"])
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.TaskDate)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.TaskName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.TaskDescription)
+                </td>
+                <td>
+                    @{
+                        string textColor;
+                        switch (item.Status)
+                        {
+                            case "Pending":
+                                textColor = "#ff9966";
+                                break;
+                            case "Approved":
+                                textColor = "green";
+                                break;
+                            default:
+                                textColor = "red";
+                                break;
+                        }
+                    }
+                    <span style="color: @textColor;">
+                        @Html.DisplayFor(modelItem => item.Status)
+                    </span>
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ApprovedOrRejectedOn)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.CreatedOn)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ModifiedOn)
+                </td>
+                <td>
+                    @Html.ActionLink("EditTask", "Edit", new { id = item.TaskID }) |
+                    @Html.ActionLink("Details", "Details", new { id = item.TaskID }) |
+                    @Html.ActionLink("Delete", "Delete", new { id = item.TaskID })
+                </td>
+            </tr>
+        }
+    }
+</table>
