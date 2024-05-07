@@ -237,6 +237,7 @@
     <Content Include="Views\Home\ShowEmpDetails.cshtml" />
     <Content Include="Views\Home\EditPerDetail.cshtml" />
     <Content Include="Views\Home\ResetPass.cshtml" />
+    <Content Include="Views\Home\EditTask.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

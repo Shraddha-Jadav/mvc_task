@@ -147,6 +147,29 @@ namespace mvc_task.Controllers
             return View();
         }
 
+        public ActionResult EditTask()
+        {
+            var task = _dbContext.Tasks.FirstOrDefault();
+            return View(task);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult EditTask(Task task)
+        {
+            var taskObj = _dbContext.Tasks.Where(x => x.TaskID == task.TaskID).FirstOrDefault();
+            if(taskObj != null)
+            {
+                taskObj.CreatedOn = DateTime.Today;
+                taskObj.TaskDate = DateTime.Today;
+                taskObj.TaskName = task.TaskName;
+                taskObj.TaskDescription = task.TaskDescription;
+
+                _dbContext.Entry(taskObj).State = EntityState.Modified;
+                _dbContext.SaveChanges();
+            }
+            return View();
+        }
 
         //-------------------Employee Detail-----------------
         public ActionResult ShowEmpDetails()
