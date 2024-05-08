@@ -53,7 +53,7 @@ namespace mvc_task.Models
         [Required(ErrorMessageResourceName = "RequiredError", ErrorMessageResourceType = typeof(StringResources))]
         public Nullable<int> ReportingPerson { get; set; }
 
-        public virtual Department Department { get; set; }
+        public virtual DepartmentMetaData Department { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Employee> Employee1 { get; set; }
         public virtual Employee Employee2 { get; set; }

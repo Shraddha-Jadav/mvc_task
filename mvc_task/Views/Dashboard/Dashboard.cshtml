@@ -4,13 +4,24 @@
     ViewBag.Title = "Deshboard";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
+@if (TempData["AlertMessage"] != null)
+{
+    <div class="d-flex justify-content-end">
+        <div id="alertMessage" class="alert alert-success w-25">
+            @TempData["AlertMessage"]
+        </div>
+    </div>
+    <script>
+        function hideAlert() {
+            $("#alertMessage").fadeOut("slow");
+        }
+        setTimeout(hideAlert, 1000);
+    </script>
 
-<div class="d-flex justify-content-between">
-    <h2>Hello @ViewBag.EmployeeName</h2>
-    <h2>@Html.ActionLink("Details", "ShowEmpDetails", "Home",  new { area = "" }, new { @class = "btn border-primary" })</h2>
-</div>
+}
+
 <div class="d-flex justify-content-end">
-    @Html.ActionLink("Add Task", "AddTask", "Home", new { area = "" }, new { @class = "btn border-primary" })
+    @Html.ActionLink("Add Task", "AddTask", "Dashboard", new { area = "" }, new { @class = "btn border-primary" })
 </div>
 <table class="table">
     <tr>
@@ -82,7 +93,7 @@
                     @Html.DisplayFor(modelItem => item.ModifiedOn)
                 </td>
                 <td>
-                    @Html.ActionLink("Edit", "EditTask", new { id = item.TaskID }) |
+                    @Html.ActionLink("Edit", "EditTask", new { id = item.TaskID })
                     @Html.ActionLink("Delete", "DeleteTask", new { id = item.TaskID })
                 </td>
             </tr>

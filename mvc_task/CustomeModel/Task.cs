@@ -5,9 +5,9 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Web;
 
-namespace mvc_task.Models
+namespace mvc_task.Model
 {
-    public class TaskMetaData
+    internal class TaskMetaData
     {
         public int TaskID { get; set; }
 

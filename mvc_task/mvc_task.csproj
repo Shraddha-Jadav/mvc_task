@@ -127,10 +127,12 @@
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
-    <Compile Include="Controllers\HomeController.cs" />
-    <Compile Include="CustomeModel\DepartmentMetaData.cs" />
-    <Compile Include="CustomeModel\EmployeeMetaData.cs" />
-    <Compile Include="CustomeModel\TaskMetaData.cs" />
+    <Compile Include="Controllers\AuthenticationController.cs" />
+    <Compile Include="Controllers\DashboardController.cs" />
+    <Compile Include="Controllers\EmployeeController.cs" />
+    <Compile Include="Controllers\TasksController.cs" />
+    <Compile Include="CustomeModel\Employee.cs" />
+    <Compile Include="CustomeModel\Task.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -230,14 +232,19 @@
     <Content Include="Views\_ViewStart.cshtml" />
     <Content Include="Views\Shared\Error.cshtml" />
     <Content Include="Views\Shared\_Layout.cshtml" />
-    <Content Include="Views\Home\Register.cshtml" />
-    <Content Include="Views\Home\Login.cshtml" />
-    <Content Include="Views\Home\AddTask.cshtml" />
-    <Content Include="Views\Home\Dashboard.cshtml" />
-    <Content Include="Views\Home\ShowEmpDetails.cshtml" />
-    <Content Include="Views\Home\EditPerDetail.cshtml" />
-    <Content Include="Views\Home\ResetPass.cshtml" />
-    <Content Include="Views\Home\EditTask.cshtml" />
+    <Content Include="Views\Authentication\Register.cshtml" />
+    <Content Include="Views\Authentication\Login.cshtml" />
+    <Content Include="Views\Dashboard\AddTask.cshtml" />
+    <Content Include="Views\Dashboard\Dashboard.cshtml" />
+    <Content Include="Views\Employee\ShowEmpDetails.cshtml" />
+    <Content Include="Views\Employee\EditPerDetail.cshtml" />
+    <Content Include="Views\Authentication\ResetPass.cshtml" />
+    <Content Include="Views\Dashboard\EditTask.cshtml" />
+    <Content Include="Views\Tasks\Create.cshtml" />
+    <Content Include="Views\Tasks\Delete.cshtml" />
+    <Content Include="Views\Tasks\Details.cshtml" />
+    <Content Include="Views\Tasks\Edit.cshtml" />
+    <Content Include="Views\Tasks\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
