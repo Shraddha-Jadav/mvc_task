@@ -9,12 +9,9 @@
 
 namespace mvc_task.Models
 {
-    using mvc_task.Model;
     using System;
     using System.Collections.Generic;
-    using System.ComponentModel.DataAnnotations;
-
-    [MetadataType(typeof(TaskMetaData))]
+    
     public partial class Task
     {
         public int TaskID { get; set; }
@@ -28,7 +25,7 @@ namespace mvc_task.Models
         public string Status { get; set; }
         public Nullable<System.DateTime> CreatedOn { get; set; }
         public Nullable<System.DateTime> ModifiedOn { get; set; }
-
+    
         public virtual Employee Employee { get; set; }
         public virtual Employee Employee1 { get; set; }
         public virtual Employee Employee2 { get; set; }

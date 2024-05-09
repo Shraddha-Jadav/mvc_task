@@ -1,12 +1,15 @@
-﻿using mvc_task.Models;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Web;
+using System.Web.Mvc;
 
-namespace mvc_task.Model
+namespace mvc_task.Models
 {
+    [MetadataType(typeof(EmployeeMetaData))]
+    public partial class Employee
+    {
         internal class EmployeeMetaData
         {
             [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
@@ -62,4 +65,8 @@ namespace mvc_task.Model
             [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
             public virtual ICollection<Task> Tasks2 { get; set; }
         }
+
+        public IList<SelectListItem> DepartmentNames { get; set; }
+        public IList<SelectListItem> EmployeeNamees { get; set; }
+    }
 }

@@ -20,8 +20,9 @@
                 <ul class="navbar-nav ms-auto">
                     @if (User.Identity.IsAuthenticated)
                     {
+                        string name = ViewBag.name;
                         <li>@Html.ActionLink("Logout", "Logout", "Authentication", null, new { @class = "me-2 text-white btn border-primary" })</li>
-                        <li>@Html.ActionLink("Hello " + @User.Identity.Name, "ShowEmpDetails", "Employee", new { area = "" }, new { @class = "btn border-primary text-white" })</li>
+                        <li>@Html.ActionLink("Hello " + name , "ShowEmpDetails", "Employee", new { area = "" }, new { @class = "btn border-primary text-white" })</li>
                     }
                     else
                     {

@@ -1,4 +1,6 @@
-﻿using mvc_task.Models;
+﻿using Antlr.Runtime.Tree;
+using Microsoft.Ajax.Utilities;
+using mvc_task.Models;
 using System;
 using System.Collections.Generic;
 using System.Data.Entity;
@@ -9,14 +11,13 @@ using System.Web.Security;
 
 namespace mvc_task.Controllers
 {
-    [AllowAnonymous]
     public class AuthenticationController : Controller
     {
-        private shraddha_crmEntities1 _dbContext;
+        private shraddha_crmEntities2 _dbContext;
 
         public AuthenticationController()
         {
-            _dbContext = new shraddha_crmEntities1();
+            _dbContext = new shraddha_crmEntities2();
         }
 
         public ActionResult Register()
@@ -57,9 +58,26 @@ namespace mvc_task.Controllers
                 {
                     Session["EmpId"] = obj.EmployeeId;
                     Session["Email"] = obj.Email;
-                    FormsAuthentication.SetAuthCookie(obj.FirstName, true);
+                    Session["Department"] = obj.DepartmentId;
+                    FormsAuthentication.SetAuthCookie(obj.Email, false);
                     TempData["AlertMessage"] = "Login sucessfully...";
-                    return RedirectToAction("Dashboard", "Dashboard");
+                    if ((int)Session["Department"] == 1)
+                    {
+                        return RedirectToAction("Dashboard", "Employee");
+                    }
+                    else if ((int)Session["Department"] == 2)
+                    {
+                        return RedirectToAction("Dashboard", "Manager");
+                    }
+                    else if ((int)Session["Department"] == 3)
+                    {
+                        return RedirectToAction("Dashboard", "Director");
+                    }
+                    else
+                    {
+                        ModelState.AddModelError("", "Somthing went wrong");
+                        return View();
+                    }
                 }
                 else
                 {

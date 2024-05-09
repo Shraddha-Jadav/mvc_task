@@ -13,10 +13,10 @@ namespace mvc_task.Models
     using System.Data.Entity;
     using System.Data.Entity.Infrastructure;
     
-    public partial class shraddha_crmEntities1 : DbContext
+    public partial class shraddha_crmEntities2 : DbContext
     {
-        public shraddha_crmEntities1()
-            : base("name=shraddha_crmEntities1")
+        public shraddha_crmEntities2()
+            : base("name=shraddha_crmEntities2")
         {
         }
     
@@ -24,7 +24,8 @@ namespace mvc_task.Models
         {
             throw new UnintentionalCodeFirstException();
         }
-  
+    
+        public virtual DbSet<Department> Departments { get; set; }
         public virtual DbSet<Employee> Employees { get; set; }
         public virtual DbSet<Task> Tasks { get; set; }
     }

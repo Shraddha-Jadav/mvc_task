@@ -241,7 +241,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <EntityContainer Name="shraddha_crmEntities1" annotation:LazyLoadingEnabled="true">
+        <EntityContainer Name="shraddha_crmEntities2" annotation:LazyLoadingEnabled="true">
           <EntitySet Name="Departments" EntityType="Self.Department" />
           <EntitySet Name="Employees" EntityType="Self.Employee" />
           <EntitySet Name="Tasks" EntityType="Self.Task" />
@@ -271,7 +271,7 @@
     <!-- C-S mapping content -->
     <edmx:Mappings>
       <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
-        <EntityContainerMapping StorageEntityContainer="shraddha_crmModelStoreContainer" CdmEntityContainer="shraddha_crmEntities1">
+        <EntityContainerMapping StorageEntityContainer="shraddha_crmModelStoreContainer" CdmEntityContainer="shraddha_crmEntities2">
           <EntitySetMapping Name="Departments">
             <EntityTypeMapping TypeName="shraddha_crmModel.Department">
               <MappingFragment StoreEntitySet="Department">

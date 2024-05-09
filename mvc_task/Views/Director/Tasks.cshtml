@@ -1,0 +1,86 @@
+﻿@model IEnumerable<mvc_task.Models.Task>
+
+@{
+    ViewBag.Title = "Tasks";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Tasks</h2>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.TaskDate)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.TaskName)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.TaskDescription)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.ApprovedOrRejectedOn)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Status)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.CreatedOn)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.ModifiedOn)
+        </th>
+        <th>
+            @Html.DisplayName("Action")
+        </th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.TaskDate)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.TaskName)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.TaskDescription)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.ApprovedOrRejectedOn)
+        </td>
+        <td>
+            @{
+                string textColor;
+                switch (item.Status)
+                {
+                    case "Pending":
+                        textColor = "#ff9966";
+                        break;
+                    case "Approved":
+                        textColor = "green";
+                        break;
+                    default:
+                        textColor = "red";
+                        break;
+                }
+            }
+            <span style="color: @textColor;">
+                @Html.DisplayFor(modelItem => item.Status)
+            </span>
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.CreatedOn)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.ModifiedOn)
+        </td>
+        <td>
+            <div class="d-flex">
+                    @Html.ActionLink("Approve", "AppOrRejByDir", new { id = item.TaskID, btn = "approve" }, new { @class = "btn border-success btn-success me-2"})
+                    @Html.ActionLink("Reject", "AppOrRejByDir", new { id = item.TaskID, btn = "reject" }, new { @class = "btn btn-danger" })
+            </div>
+        </td>
+    </tr>
+}
+
+</table>

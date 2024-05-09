@@ -9,12 +9,9 @@
 
 namespace mvc_task.Models
 {
-    using mvc_task.Model;
     using System;
     using System.Collections.Generic;
-    using System.ComponentModel.DataAnnotations;
-
-    [MetadataType(typeof(EmployeeMetaData))]
+    
     public partial class Employee
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
@@ -25,7 +22,7 @@ namespace mvc_task.Models
             this.Tasks1 = new HashSet<Task>();
             this.Tasks2 = new HashSet<Task>();
         }
-
+    
         public int EmployeeId { get; set; }
         public string EmployeeCode { get; set; }
         public string Email { get; set; }
@@ -36,7 +33,7 @@ namespace mvc_task.Models
         public string Gender { get; set; }
         public Nullable<int> DepartmentId { get; set; }
         public Nullable<int> ReportingPerson { get; set; }
-
+    
         public virtual Department Department { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Employee> Employee1 { get; set; }
