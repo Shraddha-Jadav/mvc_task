@@ -21,7 +21,7 @@
 }
 
 <div class="d-flex justify-content-end">
-    @Html.ActionLink("Add Task", "AddTask", "Dashboard", new { area = "" }, new { @class = "btn border-primary" })
+    @Html.ActionLink("Add Task", "AddTask", "Employee", new { area = "" }, new { @class = "btn border-primary" })
 </div>
 <table class="table">
     <tr>
@@ -93,7 +93,10 @@
                     @Html.DisplayFor(modelItem => item.ModifiedOn)
                 </td>
                 <td>
-                    @Html.ActionLink("Edit", "EditTask", new { id = item.TaskID })
+                    @if(item.Status == "Pending")
+                    {
+                    @Html.ActionLink("Edit", "EditTask", new { id = item.TaskID , status = item.Status})
+                    }
                     @Html.ActionLink("Delete", "DeleteTask", new { id = item.TaskID })
                 </td>
             </tr>

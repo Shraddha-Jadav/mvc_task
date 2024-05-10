@@ -128,10 +128,10 @@
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="Controllers\AuthenticationController.cs" />
-    <Compile Include="Controllers\DepartmentModel.cs" />
     <Compile Include="Controllers\DirectorController.cs" />
     <Compile Include="Controllers\EmployeeController.cs" />
     <Compile Include="Controllers\ManagerController.cs" />
+    <Compile Include="CustomeModel\EditUserViewModel.cs" />
     <Compile Include="CustomeModel\Employee.cs" />
     <Compile Include="CustomeModel\Task.cs" />
     <Compile Include="Global.asax.cs">

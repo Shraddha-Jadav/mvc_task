@@ -19,22 +19,16 @@ namespace mvc_task.Controllers
         }
 
         //------------------dashboard---------------
+
         public ActionResult Dashboard()
         {
-            if (Session["EmpId"] != null)
-            {
-                var tasks = _dbContext.Tasks.ToList();
-                int empId = (int)Session["EmpId"];
-                var empName = (from e in _dbContext.Employees
-                               where e.EmployeeId == empId
-                               select e.FirstName).FirstOrDefault();
-                ViewBag.name = empName;
-                return View(tasks);
-            }
-            else
-            {
-                return RedirectToAction("Login", "Authentication");
-            }
+            var tasks = _dbContext.Tasks.ToList();
+            int empId = (int)Session["EmpId"];
+            var empName = (from e in _dbContext.Employees
+                           where e.EmployeeId == empId
+                           select e.FirstName).FirstOrDefault();
+            ViewBag.name = empName;
+            return View(tasks);
         }
 
         //---------------employee details----------
@@ -99,8 +93,12 @@ namespace mvc_task.Controllers
             return View();
         }
 
-        public ActionResult EditTask(int? id)
+        public ActionResult EditTask(int? id, string status)
         {
+            if (status != "Pending")
+            {
+                return RedirectToAction("Dashboard");
+            }
             var task = _dbContext.Tasks.Where(x => x.TaskID == id).FirstOrDefault();
             TempData["TaskId"] = id;
             TempData.Keep();

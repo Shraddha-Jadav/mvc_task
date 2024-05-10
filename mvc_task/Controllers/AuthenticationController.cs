@@ -11,6 +11,7 @@ using System.Web.Security;
 
 namespace mvc_task.Controllers
 {
+    [AllowAnonymous]
     public class AuthenticationController : Controller
     {
         private shraddha_crmEntities2 _dbContext;
