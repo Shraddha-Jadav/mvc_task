@@ -157,5 +157,40 @@ namespace mvc_task.Controllers
             var tasks = _dbContext.Tasks.Where(x => x.EmployeeId == EmpId).ToList();
             return RedirectToAction("Dashboard");
         }
+
+        public ActionResult DeleteEmp(int? id)
+        {
+            var emp = _dbContext.Employees.Find(id);
+            if(emp != null)
+            {
+                var tasks = _dbContext.Tasks.Where(x => x.EmployeeId == id).ToList();
+                foreach(var task in tasks)
+                {
+                    _dbContext.Tasks.Remove(task);
+                }
+                _dbContext.Employees.Remove(emp);
+                _dbContext.SaveChanges();
+            }
+            return RedirectToAction("Dashboard");
+        }
+
+        public ActionResult DeleteManager(int? id)
+        {
+            var manager = _dbContext.Employees.Find(id);
+            if(manager != null)
+            {
+                var empList = _dbContext.Employees.Where(x => x.ReportingPerson == id).ToList();
+                foreach(var emp in empList)
+                {
+                    emp.ReportingPerson = manager.ReportingPerson;
+                    _dbContext.Entry(emp).State = EntityState.Modified;
+                    _dbContext.SaveChanges();
+                }
+
+                _dbContext.Employees.Remove(manager);
+                _dbContext.SaveChanges();
+            }
+            return RedirectToAction("Dashboard");
+        }
     }
 }

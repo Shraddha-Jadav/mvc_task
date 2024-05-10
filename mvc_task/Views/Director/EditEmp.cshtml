@@ -71,6 +71,12 @@
         </div>
 
         <div class="form-group">
+            @Html.Label("Reporting Person")<br />
+
+            @Html.DisplayFor(x => x.EmpObj.ReportingPerson)
+        </div>
+
+        <div class="form-group">
             @Html.LabelFor(model => model.EmployeeNames, "Reporting Person", htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
                 @if (Model.EmpObj.DepartmentId == 3)
