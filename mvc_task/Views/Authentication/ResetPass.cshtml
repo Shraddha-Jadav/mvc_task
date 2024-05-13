@@ -1,46 +1,103 @@
 ﻿@model mvc_task.Models.Employee
 
 @{
-    ViewBag.Title = "ResetPass";
-    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewBag.Title = "Forgot Password";
+    Layout = null;
 }
 
-<h2>ResetPass</h2>
 
+<!DOCTYPE html>
+<html lang="en">
 
-@using (Html.BeginForm("ResetPass", "Authentication", FormMethod.Post))
-{
-    @Html.AntiForgeryToken()
+<head>
 
-<div class="form-horizontal">
-    <h4>Employee</h4>
-    <hr />
-    @Html.HiddenFor(model => model.EmployeeId)
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
 
-    <div class="form-group">
-        @Html.LabelFor(model => model.Email, htmlAttributes: new { @class = "control-label col-md-2" })
-        <div class="col-md-10">
-            @Html.EditorFor(model => model.Email, new { htmlAttributes = new { @class = "form-control" } })
-            @Html.ValidationMessageFor(model => model.Email, "", new { @class = "text-danger" })
+    <title>Forgot Password</title>
+
+    <!-- Custom fonts for this template-->
+    <link href="~/Content/vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
+    <link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
+          rel="stylesheet">
+
+    <!-- Custom styles for this template-->
+    <link href="~/Content/css/sb-admin-2.min.css" rel="stylesheet">
+
+</head>
+
+<body class="bg-gradient-primary">
+
+    <div class="container">
+
+        <!-- Outer Row -->
+        <div class="row justify-content-center">
+
+            <div class="col-xl-10 col-lg-12 col-md-9">
+
+                <div class="card o-hidden border-0 shadow-lg my-5">
+                    <div class="card-body p-0">
+                        <!-- Nested Row within Card Body -->
+                        <div class="row">
+                            <div class="col-lg-6 d-none d-lg-block bg-password-image"></div>
+                            <div class="col-lg-6">
+                                <div class="p-5">
+                                    <div class="text-center">
+                                        <h1 class="h4 text-gray-900 mb-2">Forgot Your Password?</h1>
+                                        <p class="mb-4">
+                                            We get it, stuff happens. Just enter your email address below
+                                            and set your new password
+                                        </p>
+                                    </div>
+                                    @using (Html.BeginForm("ResetPass", "Authentication", FormMethod.Post, new { @class = "user" }))
+                                    {
+                                        @Html.AntiForgeryToken()
+                                        @Html.HiddenFor(model => model.EmployeeId)
+                                        <div class="form-group">
+                                            @Html.EditorFor(model => model.Email, new { htmlAttributes = new { @class = "form-control form-control-user", placeholder = "Enter Email Address..." } })
+                                            @Html.ValidationMessageFor(model => model.Email, "", new { @class = "text-danger" })
+                                        </div>
+                                        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                                        <div class="form-group">
+                                            @Html.EditorFor(model => model.Password, new { htmlAttributes = new { @class = "form-control form-control-user", placeholder = "Enter new password" } })
+                                            @Html.ValidationMessageFor(model => model.Password, "", new { @class = "text-danger" })
+                                        </div>
+                                        <input type="submit" value="Reset" placeholder="Reset Password" class="btn btn-primary btn-user btn-block"/>
+                                        }
+                                        <hr>
+                                        <div class="text-center">
+                                            @Html.ActionLink("Create an Account!", "Register", "Authentication", new { area = "" }, new { @class = "small" })
+                                        </div>
+                                        <div class="text-center">
+                                            @Html.ActionLink("Already have an account? Login!", "Login", "Authentication", new { area = "" }, new { @class = " small" })
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+
         </div>
-    </div>
-    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-    <div class="form-group">
-        @Html.LabelFor(model => model.Password, htmlAttributes: new { @class = "control-label col-md-2" })
-        <div class="col-md-10">
-            @Html.EditorFor(model => model.Password, new { htmlAttributes = new { @class = "form-control" } })
-            @Html.ValidationMessageFor(model => model.Password, "", new { @class = "text-danger" })
-        </div>
-    </div>
 
-    <div class="form-group">
-        <div class="col-md-offset-2 col-md-10">
-            <input type="submit" value="Reset" class="btn btn-default" />
-        </div>
-    </div>
-</div>
-}
+        <!-- Bootstrap core JavaScript-->
+        <script src="~/Content/vendor/jquery/jquery.min.js"></script>
+        <script src="~/Content/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
 
-@section Scripts {
-    @Scripts.Render("~/bundles/jqueryval")
-}
+        <!-- Core plugin JavaScript-->
+        <script src="~/Content/vendor/jquery-easing/jquery.easing.min.js"></script>
+
+        <!-- Custom scripts for all pages-->
+        <script src="~/Content/js/sb-admin-2.min.js"></script>
+        @section Scripts {
+            @Scripts.Render("~/bundles/jqueryval")
+        }
+    </body>
+
+</html>

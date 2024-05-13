@@ -82,7 +82,9 @@ namespace mvc_task.Controllers
 
                 _dbContext.Entry(empObj).State = EntityState.Modified;
                 TempData["AlertMessage"] = "Edit Details Sucessfully...";
+                _dbContext.Configuration.ValidateOnSaveEnabled = false;
                 _dbContext.SaveChanges();
+                _dbContext.Configuration.ValidateOnSaveEnabled = true;
             }
             return RedirectToAction("ShowEmpDetails");
         }

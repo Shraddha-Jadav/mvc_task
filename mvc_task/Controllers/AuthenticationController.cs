@@ -72,6 +72,7 @@ namespace mvc_task.Controllers
                 {
                     Session["EmpId"] = obj.EmployeeId;
                     Session["Email"] = obj.Email;
+                    Session["Name"] = obj.FirstName;
                     Session["Department"] = obj.DepartmentId;
                     FormsAuthentication.SetAuthCookie(obj.Email, false);
                     TempData["AlertMessage"] = "Login sucessfully...";
@@ -122,8 +123,14 @@ namespace mvc_task.Controllers
                 {
                     empObj.Password = employee.Password;
 
+                    ModelState.Remove("Email");
+
                     _dbContext.Entry(empObj).State = EntityState.Modified;
+
+                    _dbContext.Configuration.ValidateOnSaveEnabled = false;
                     _dbContext.SaveChanges();
+                    _dbContext.Configuration.ValidateOnSaveEnabled = true;
+
                     TempData["AlertMessage"] = "Reset Password Sucessfully...";
                     return RedirectToAction("Login");
                 }

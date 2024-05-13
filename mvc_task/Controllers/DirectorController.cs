@@ -22,11 +22,25 @@ namespace mvc_task.Controllers
 
         public ActionResult Index()
         {
-            var employees = _dbContext.Employees.ToList();
-            int directorId = (int)Session["EmpId"];
-            string dirName = (from e in _dbContext.Employees where e.EmployeeId == directorId select e.FirstName).FirstOrDefault();
-            ViewBag.name = dirName;
-            return View(employees);
+            return View();
+        }
+
+        public ActionResult AllStaff(int? id)
+        {
+            if(id != null)
+            {
+                var employees = _dbContext.Employees.Where(x => x.DepartmentId == id).ToList();
+                ViewBag.DeptId = id;
+                int directorId = (int)Session["EmpId"];
+                string dirName = (from e in _dbContext.Employees where e.EmployeeId == directorId select e.FirstName).FirstOrDefault();
+                ViewBag.name = dirName;
+                return View(employees);
+            }
+            else
+            {
+                return RedirectToAction("Index");
+            }
+            
         }
 
         //Employee details
@@ -60,7 +74,9 @@ namespace mvc_task.Controllers
 
                 _dbContext.Entry(empObj).State = EntityState.Modified;
                 TempData["AlertMessage"] = "Edit Details Sucessfully...";
+                _dbContext.Configuration.ValidateOnSaveEnabled = false;
                 _dbContext.SaveChanges();
+                _dbContext.Configuration.ValidateOnSaveEnabled = true;
             }
             return RedirectToAction("ShowEmpDetails");
         }
@@ -107,6 +123,7 @@ namespace mvc_task.Controllers
         {
             ModelState.Remove("EmpObj.Password");
             ModelState.Remove("EmpObj.ReportingPerson");
+            ModelState.Remove("EmpObj.Email");
             if (ModelState.IsValid)
             {
                 int id = employee.EmpObj.EmployeeId;
@@ -128,9 +145,11 @@ namespace mvc_task.Controllers
                         empObj.ReportingPerson = employee.EmpObj.ReportingPerson;
                     }
                     _dbContext.Entry(empObj).State = EntityState.Modified;
+                    _dbContext.Configuration.ValidateOnSaveEnabled = false;
                     _dbContext.SaveChanges();
+                    _dbContext.Configuration.ValidateOnSaveEnabled = true;
                 }
-                return RedirectToAction("Index");
+                return RedirectToAction("AllStaff", "Director", empObj.DepartmentId);
             }
             else
             {
@@ -205,7 +224,9 @@ namespace mvc_task.Controllers
                     _dbContext.Tasks.Remove(task);
                 }
                 _dbContext.Employees.Remove(emp);
+                _dbContext.Configuration.ValidateOnSaveEnabled = false;
                 _dbContext.SaveChanges();
+                _dbContext.Configuration.ValidateOnSaveEnabled = true;
             }
             return RedirectToAction("Index");
         }
@@ -224,7 +245,9 @@ namespace mvc_task.Controllers
                 }
 
                 _dbContext.Employees.Remove(manager);
+                _dbContext.Configuration.ValidateOnSaveEnabled = false;
                 _dbContext.SaveChanges();
+                _dbContext.Configuration.ValidateOnSaveEnabled = true;
             }
             return RedirectToAction("Index");
         }
