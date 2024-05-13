@@ -14,6 +14,7 @@
     <script>
         function hideAlert() {
             $("#alertMessage").fadeOut("slow");
+            @TempData.Remove("AlertMessage");
         }
         setTimeout(hideAlert, 1000);
     </script>
@@ -93,9 +94,9 @@
                     @Html.DisplayFor(modelItem => item.ModifiedOn)
                 </td>
                 <td>
-                    @if(item.Status == "Pending")
+                    @if (item.Status == "Pending")
                     {
-                    @Html.ActionLink("Edit", "EditTask", new { id = item.TaskID , status = item.Status})
+                        @Html.ActionLink("Edit", "EditTask", new { id = item.TaskID, status = item.Status })
                     }
                     @Html.ActionLink("Delete", "DeleteTask", new { id = item.TaskID })
                 </td>

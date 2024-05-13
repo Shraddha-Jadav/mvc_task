@@ -11,7 +11,7 @@
 <body>
     <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-dark bg-dark">
         <div class="container">
-            @Html.ActionLink("Dashboard", "Dashboard", "Dashboard", new { area = "" }, new { @class = "navbar-brand" })
+            @Html.ActionLink("Dashboard", "Index", new { area = "" }, new { @class = "navbar-brand" })
             <button type="button" class="navbar-toggler" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" title="Toggle navigation" aria-controls="navbarSupportedContent"
                     aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
@@ -22,7 +22,7 @@
                     {
                         string name = ViewBag.name;
                         <li>@Html.ActionLink("Logout", "Logout", "Authentication", null, new { @class = "me-2 text-white btn border-primary" })</li>
-                        <li>@Html.ActionLink("Hello " + name , "ShowEmpDetails", "Employee", new { area = "" }, new { @class = "btn border-primary text-white" })</li>
+                        <li>@Html.ActionLink("Hello " + name , "ShowEmpDetails", new { area = "" }, new { @class = "btn border-primary text-white" })</li>
                     }
                     else
                     {

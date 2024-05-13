@@ -4,6 +4,7 @@ using mvc_task.Models;
 using System;
 using System.Collections.Generic;
 using System.Data.Entity;
+using System.Data.Entity.Validation;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
@@ -30,13 +31,25 @@ namespace mvc_task.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Register(Employee employee)
         {
-            employee.DepartmentId = 1;
-            employee.ReportingPerson = 1;
-            _dbContext.Employees.Add(employee);
-            _dbContext.SaveChanges();
-            employee.EmployeeCode = "SIT-" + employee.EmployeeId;
-            _dbContext.Entry(employee).State = EntityState.Modified;
-            _dbContext.SaveChanges();
+            try
+            {
+                employee.DepartmentId = 1;
+                employee.ReportingPerson = 1;
+                _dbContext.Employees.Add(employee);
+                _dbContext.SaveChanges();
+            }
+            catch (DbEntityValidationException ex)
+            {
+                foreach (var validationErrors in ex.EntityValidationErrors)
+                {
+                    foreach (var validationError in validationErrors.ValidationErrors)
+                    {
+                        ModelState.AddModelError(validationError.PropertyName, validationError.ErrorMessage);
+                    }
+                }
+                return View(employee);
+            }
+
             TempData["AlertMessage"] = "Register sucessfully...";
             return RedirectToAction("login");
         }
@@ -64,15 +77,15 @@ namespace mvc_task.Controllers
                     TempData["AlertMessage"] = "Login sucessfully...";
                     if ((int)Session["Department"] == 1)
                     {
-                        return RedirectToAction("Dashboard", "Employee");
+                        return RedirectToAction("Index", "Employee");
                     }
                     else if ((int)Session["Department"] == 2)
                     {
-                        return RedirectToAction("Dashboard", "Manager");
+                        return RedirectToAction("Index", "Manager");
                     }
                     else if ((int)Session["Department"] == 3)
                     {
-                        return RedirectToAction("Dashboard", "Director");
+                        return RedirectToAction("Index", "Director");
                     }
                     else
                     {
@@ -126,6 +139,7 @@ namespace mvc_task.Controllers
         public ActionResult Logout()
         {
             FormsAuthentication.SignOut();
+            TempData["AlertMessage"] = "Logout Sucessfully...";
             return RedirectToAction("Login");
         }
     }

@@ -1,6 +1,6 @@
 ﻿@model IEnumerable<mvc_task.Models.Employee>
 @{
-    ViewBag.Title = "Dashboard";
+    ViewBag.Title = "Index";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
@@ -23,12 +23,6 @@
         </th>
         <th>
             @Html.DisplayNameFor(model => model.Gender)
-        </th>
-        <th>
-            @Html.DisplayName("Department")
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Employee2.EmployeeCode)
         </th>
         <th>Actions</th>
     </tr>
@@ -62,12 +56,6 @@
                     @Html.DisplayName(gender)
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.Department.Name)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Employee2.EmployeeCode)
-                </td>
-                <td>
                     @Html.ActionLink("Edit Details", "EditEmp", new { id = item.EmployeeId }, new { @class = "btn btn-primary btn-sm" })
                 </td>
             </tr>
@@ -97,10 +85,7 @@
             @Html.DisplayNameFor(model => model.Gender)
         </th>
         <th>
-            @Html.DisplayName("Department")
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Employee2.EmployeeCode)
+            @Html.DisplayName("Reporting Person")
         </th>
         <th>Actions</th>
     </tr>
@@ -133,10 +118,7 @@
                     @Html.DisplayName(gender)
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.Department.Name)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Employee2.EmployeeCode)
+                    @Html.DisplayFor(modelItem => item.Employee2.FirstName)
                 </td>
                 <td>
                     @Html.ActionLink("Edit Details", "EditEmp", new { id = item.EmployeeId }, new { @class = "btn btn-primary btn-sm" })
@@ -169,10 +151,7 @@
             @Html.DisplayNameFor(model => model.Gender)
         </th>
         <th>
-            @Html.DisplayName("Department")
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Employee2.EmployeeCode)
+            @Html.DisplayName("Reporting Person")
         </th>
         <th>Actions</th>
     </tr>
@@ -206,10 +185,7 @@
                     @Html.DisplayName(gender)
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.Department.Name)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Employee2.EmployeeCode)
+                    @Html.DisplayFor(modelItem => item.Employee2.FirstName)
                 </td>
                 <td>
                     @Html.ActionLink("View Tasks", "Tasks", new { id = item.EmployeeId }, new { @class = "btn btn-primary btn-sm" })

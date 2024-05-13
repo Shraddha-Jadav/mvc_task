@@ -18,9 +18,9 @@ namespace mvc_task.Controllers
             _dbContext = new shraddha_crmEntities2();
         }
 
-        //------------------dashboard---------------
+        //------------------Index---------------
 
-        public ActionResult Dashboard()
+        public ActionResult Index()
         {
             var tasks = _dbContext.Tasks.ToList();
             int empId = (int)Session["EmpId"];
@@ -64,7 +64,7 @@ namespace mvc_task.Controllers
                 TempData["AlertMessage"] = "Edit Details Sucessfully...";
                 _dbContext.SaveChanges();
             }
-            return RedirectToAction("Dashboard");
+            return RedirectToAction("Index");
         }
 
 
@@ -88,7 +88,7 @@ namespace mvc_task.Controllers
                 _dbContext.Tasks.Add(task);
                 _dbContext.SaveChanges();
                 TempData["AlertMessage"] = "Add task sucessfully...";
-                return RedirectToAction("Dashboard");
+                return RedirectToAction("Index");
             }
             return View();
         }
@@ -97,7 +97,7 @@ namespace mvc_task.Controllers
         {
             if (status != "Pending")
             {
-                return RedirectToAction("Dashboard");
+                return RedirectToAction("Index");
             }
             var task = _dbContext.Tasks.Where(x => x.TaskID == id).FirstOrDefault();
             TempData["TaskId"] = id;
@@ -122,7 +122,7 @@ namespace mvc_task.Controllers
                 _dbContext.Entry(taskObj).State = EntityState.Modified;
                 _dbContext.SaveChanges();
                 TempData["AlertMessage"] = "Edit task sucessfully...";
-                return RedirectToAction("Dashboard");
+                return RedirectToAction("Index");
             }
             return View();
         }
@@ -136,7 +136,7 @@ namespace mvc_task.Controllers
                 _dbContext.SaveChanges();
                 TempData["AlertMessage"] = "Delete task sucessfully...";
             }
-            return RedirectToAction("Dashboard");
+            return RedirectToAction("Index");
         }
     }
 }
