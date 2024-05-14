@@ -12,7 +12,6 @@ using System.Web.Security;
 
 namespace mvc_task.Controllers
 {
-    [AllowAnonymous]
     public class AuthenticationController : Controller
     {
         private shraddha_crmEntities2 _dbContext;
@@ -31,27 +30,22 @@ namespace mvc_task.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Register(Employee employee)
         {
-            try
+            bool existingEmp = _dbContext.Employees.Any(u => u.Email == employee.Email);
+            if (existingEmp)
+            {
+                Console.WriteLine("Error");
+                ModelState.AddModelError("Emal", "Email already exists. Please enter another email address.");
+            }
+            if (ModelState.IsValid)
             {
                 employee.DepartmentId = 1;
                 employee.ReportingPerson = 1;
                 _dbContext.Employees.Add(employee);
                 _dbContext.SaveChanges();
+                TempData["AlertMessage"] = "Register sucessfully...";
+                return RedirectToAction("login");
             }
-            catch (DbEntityValidationException ex)
-            {
-                foreach (var validationErrors in ex.EntityValidationErrors)
-                {
-                    foreach (var validationError in validationErrors.ValidationErrors)
-                    {
-                        ModelState.AddModelError(validationError.PropertyName, validationError.ErrorMessage);
-                    }
-                }
-                return View(employee);
-            }
-
-            TempData["AlertMessage"] = "Register sucessfully...";
-            return RedirectToAction("login");
+            return View(employee);
         }
 
         public ActionResult Login()
@@ -145,6 +139,7 @@ namespace mvc_task.Controllers
 
         public ActionResult Logout()
         {
+            Session.Clear();
             FormsAuthentication.SignOut();
             TempData["AlertMessage"] = "Logout Sucessfully...";
             return RedirectToAction("Login");

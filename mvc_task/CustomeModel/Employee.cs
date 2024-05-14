@@ -22,7 +22,7 @@ namespace mvc_task.Models
             [Display(Name = "Email", ResourceType = typeof(StringResources))]
             [Required(ErrorMessageResourceName = "RequiredError", ErrorMessageResourceType = typeof(StringResources))]
             [DataType(DataType.EmailAddress, ErrorMessageResourceName = "EmailError", ErrorMessageResourceType = typeof(StringResources))]
-            [UniqueEmail(ErrorMessage = "Email already exists. Please enter another email address.")]
+            
             public string Email { get; set; }
 
             [Display(Name = "Pass", ResourceType = typeof(StringResources))]
