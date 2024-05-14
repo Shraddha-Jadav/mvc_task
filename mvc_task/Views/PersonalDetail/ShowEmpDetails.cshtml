@@ -1,0 +1,94 @@
+﻿@model mvc_task.Models.Employee
+
+@{
+    ViewBag.Title = "ShowEmpDetails";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-header d-flex justify-content-between">
+                    <h2>Personal Detail</h2>
+                    <h1>
+                        <button type="button" data-id="@Model.EmployeeId" class="btn btn-warning editDetail">Edit</button>
+                    </h1>
+                </div>
+                <div class="card-body">
+                    <dl class="dl-horizontal">
+                        <dt>
+                            @Html.DisplayNameFor(model => model.EmployeeCode)
+                        </dt>
+                        <dd>
+                            @Html.DisplayFor(model => model.EmployeeCode)
+                        </dd>
+                        <dt>
+                            @Html.DisplayNameFor(model => model.Email)
+                        </dt>
+                        <dd>
+                            @Html.DisplayFor(model => model.Email)
+                        </dd>
+                        <dt>
+                            @Html.DisplayNameFor(model => model.FirstName)
+                        </dt>
+                        <dd>
+                            @Html.DisplayFor(model => model.FirstName)
+                        </dd>
+                        <dt>
+                            @Html.DisplayNameFor(model => model.LastName)
+                        </dt>
+                        <dd>
+                            @Html.DisplayFor(model => model.LastName)
+                        </dd>
+                        <dt>
+                            @Html.DisplayNameFor(model => model.DOB)
+                        </dt>
+                        <dd>
+                            @Html.DisplayFor(model => model.DOB)
+                        </dd>
+                        <dt>
+                            @Html.DisplayNameFor(model => model.Gender)
+                        </dt>
+                        <dd>
+                            @{
+                                string gender = Model.Gender == "F" ? "Female" : "Male";
+                            }
+                            @Html.DisplayName(gender)
+                        </dd>
+                        <dt>
+                            @Html.DisplayNameFor(model => model.Department.Name)
+                        </dt>
+                        <dd>
+                            @Html.DisplayFor(model => model.Department.Name)
+                        </dd>
+                        <dt>
+                            @Html.DisplayName("Reporting Person ID")
+                        </dt>
+                        <dd>
+                            @Html.DisplayFor(model => model.Employee2.EmployeeCode)
+                        </dd>
+                    </dl>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal" tabindex="-1" id="myModal" data-bs-backdrop="static">
+    <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title">Detail</h2>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}

@@ -42,9 +42,6 @@
             @Html.DisplayNameFor(model => model.Status)
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.ApprovedOrRejectedBy)
-        </th>
-        <th>
             @Html.DisplayNameFor(model => model.ApprovedOrRejectedOn)
         </th>
         <th>
@@ -91,10 +88,6 @@
                     </span>
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.Employee.FirstName)
-                    @Html.DisplayFor(modelItem => item.Employee.LastName)
-                </td>
-                <td>
                     @Html.DisplayFor(modelItem => item.ApprovedOrRejectedOn)
                 </td>
                 <td>
@@ -108,7 +101,7 @@
                     {
                         <button type="button" data-id="@item.TaskID" class="btn btn-sm btn-warning px-3 AddTask">Edit</button>
                     }
-                    @Html.ActionLink("Delete", "DeleteTask", new { id = item.TaskID }, new {@class = "btn btn-danger btn-sm"})
+                    @Html.ActionLink("Delete", "DeleteTask", new { id = item.TaskID }, new { @class = "btn btn-danger btn-sm" })
                 </td>
             </tr>
         }

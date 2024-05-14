@@ -7,7 +7,7 @@
       <Diagram DiagramId="c69c4b159bc045eeb11aae176fe7856d" Name="Diagram1">
         <EntityTypeShape EntityType="shraddha_crmModel.Department" Width="1.5" PointX="0.75" PointY="2.25" IsExpanded="true" />
         <EntityTypeShape EntityType="shraddha_crmModel.Employee" Width="1.5" PointX="3" PointY="1" IsExpanded="true" />
-        <EntityTypeShape EntityType="shraddha_crmModel.Task" Width="1.5" PointX="5.25" PointY="1.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="shraddha_crmModel.Task" Width="1.5" PointX="6.75" PointY="1.25" IsExpanded="true" />
         <AssociationConnector Association="shraddha_crmModel.FK__Employee__Depart__3A81B327" ManuallyRouted="false" />
         <AssociationConnector Association="shraddha_crmModel.FK__Employee__Report__3B75D760" ManuallyRouted="false" />
         <AssociationConnector Association="shraddha_crmModel.FK__Tasks__ApprovedO__403A8C7D" ManuallyRouted="false" />

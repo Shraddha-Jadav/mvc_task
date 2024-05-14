@@ -131,6 +131,8 @@
     <Compile Include="Controllers\DirectorController.cs" />
     <Compile Include="Controllers\EmployeeController.cs" />
     <Compile Include="Controllers\ManagerController.cs" />
+    <Compile Include="Controllers\PersonalDetailController.cs" />
+    <Compile Include="Controllers\TaskController.cs" />
     <Compile Include="CustomeModel\EditUserViewModel.cs" />
     <Compile Include="CustomeModel\Employee.cs" />
     <Compile Include="CustomeModel\Task.cs" />
@@ -188,6 +190,7 @@
     <Content Include="Content\bootstrap.rtl.min.css" />
     <Content Include="Content\css\sb-admin-2.css" />
     <Content Include="Content\css\sb-admin-2.min.css" />
+    <Content Include="Content\Custom.js" />
     <Content Include="Content\CustomePages\blank.html" />
     <Content Include="Content\img\undraw_posting_photo.svg" />
     <Content Include="Content\img\undraw_profile.svg" />
@@ -2069,28 +2072,20 @@
     <Content Include="Views\Shared\_Layout.cshtml" />
     <Content Include="Views\Authentication\Register.cshtml" />
     <Content Include="Views\Authentication\Login.cshtml" />
-    <Content Include="Views\Employee\AddTask.cshtml" />
     <Content Include="Views\Employee\Index.cshtml" />
-    <Content Include="Views\Employee\ShowEmpDetails.cshtml" />
-    <Content Include="Views\Employee\EditPerDetail.cshtml" />
     <Content Include="Views\Authentication\ResetPass.cshtml" />
-    <Content Include="Views\Employee\EditTask.cshtml" />
-    <Content Include="Views\Tasks\Create.cshtml" />
-    <Content Include="Views\Tasks\Delete.cshtml" />
-    <Content Include="Views\Tasks\Details.cshtml" />
-    <Content Include="Views\Tasks\Edit.cshtml" />
-    <Content Include="Views\Tasks\Index.cshtml" />
     <Content Include="Views\Director\AllStaff.cshtml" />
     <Content Include="Views\Director\Tasks.cshtml" />
-    <Content Include="Views\Director\EditEmp.cshtml" />
-    <Content Include="Views\Director\ShowEmpDetails.cshtml" />
-    <Content Include="Views\Director\EditPerDetail.cshtml" />
     <Content Include="Views\Manager\Index.cshtml" />
     <Content Include="Views\Manager\Tasks.cshtml" />
-    <Content Include="Views\Manager\ShowEmpDetails.cshtml" />
-    <Content Include="Views\Manager\EditPerDetail.cshtml" />
     <Content Include="Views\Director\Index.cshtml" />
-    <Content Include="Views\Director\EditEmployee.cshtml" />
+    <Content Include="Views\Shared\_partialPageTask.cshtml" />
+    <Content Include="Views\Shared\_partialUserEditForm.cshtml" />
+    <Content Include="Views\Shared\_partialEditUserByDir.cshtml" />
+    <Content Include="Views\PersonalDetail\ShowEmpDetails.cshtml" />
+    <Content Include="Views\PersonalDetail\Index.cshtml" />
+    <Content Include="Views\Task\AllTasks.cshtml" />
+    <Content Include="Views\Manager\EmployeeList.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

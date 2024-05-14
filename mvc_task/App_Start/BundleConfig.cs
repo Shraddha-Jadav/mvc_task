@@ -25,6 +25,11 @@ namespace mvc_task
             bundles.Add(new StyleBundle("~/Content/css").Include(
                       "~/Content/bootstrap.css",
                       "~/Content/site.css"));
+
+            //For Custome Js 
+            bundles.Add(new Bundle("~/bundles/customjs").Include(
+                    "~/Content/Custom.js"
+                ));
         }
     }
 }

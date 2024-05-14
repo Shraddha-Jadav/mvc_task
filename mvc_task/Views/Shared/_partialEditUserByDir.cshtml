@@ -1,20 +1,10 @@
 ﻿@model mvc_task.Models.EditUserViewModel
 
-@{
-    ViewBag.Title = "EditEmp";
-    Layout = "~/Views/Shared/_Layout.cshtml";
-}
 
-<h2>EditEmp</h2>
-
-
-@using (Html.BeginForm("EditEmp", "Director", FormMethod.Post))
-{
+<form class="pt-3" method="post" id="formData" action="/Director/EditEmp">
     @Html.AntiForgeryToken()
 
     <div class="form-horizontal">
-        <h4>Employee</h4>
-        <hr />
         @Html.ValidationSummary(true, "", new { @class = "text-danger" })
         @Html.HiddenFor(model => model.EmpObj.EmployeeId)
 
@@ -84,7 +74,7 @@
             <div class="col-md-10">
                 @if (Model.EmpObj.DepartmentId == 3)
                 {
-                    @Html.DropDownListFor(x => x.EmpObj.ReportingPerson, new List<SelectListItem>(), new { @id = "ddlEmployeeName", @class = "form-control", @disabled = "true"})
+                    @Html.DropDownListFor(x => x.EmpObj.ReportingPerson, new List<SelectListItem>(), new { @id = "ddlEmployeeName", @class = "form-control", @disabled = "true" })
                 }
                 else
                 {
@@ -96,41 +86,8 @@
 
         <div class="form-group">
             <div class="col-md-offset-2 col-md-10">
-                <input type="submit" value="Save" class="btn btn-default" />
+                <input type="submit" value="Update" class="btn btn-success" />
             </div>
         </div>
     </div>
-}
-
-@section Scripts {
-    @Scripts.Render("~/bundles/jqueryval")
-    <script type="text/javascript">
-
-        $(document).ready(function () {
-            $('#ddlDepartment').change(function () {
-                $.ajax({
-                    type: "post",
-                    url: "/Director/GetReportingPer",
-                    data: { departmentId: $('#ddlDepartment').val() },
-                    datatype: "json",
-                    traditional: true,
-                    success: function (data) {
-                        var Employee = $("#ddlEmployeeName");
-                        Employee.empty();
-                        console.log(data);
-                        if (data == null || Object.keys(data).length === 0) {
-                            Employee.append('<option value="" disabled selected>No Reporting Person</option>');
-                            Employee.prop('disabled', true);
-                        }
-                        else {
-                            $('#ddlEmployeeName').prop('disabled', false);
-                            for (var i = 0; i < data.length; i++) {
-                                Employee.append('<option value=' + data[i].Value + '>' + data[i].Text + '</option>');
-                            }
-                        }
-                    }
-                });
-            });
-        });
-    </script>
-}
+</form>

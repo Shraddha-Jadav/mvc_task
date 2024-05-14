@@ -7,6 +7,7 @@ using System.Data.Entity;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using System.Web.UI.WebControls;
 
 namespace mvc_task.Controllers
 {
@@ -43,44 +44,6 @@ namespace mvc_task.Controllers
             
         }
 
-        //Employee details
-        public ActionResult ShowEmpDetails()
-        {
-            int id = (int)Session["EmpId"];
-            var employee = _dbContext.Employees.Where(x => x.EmployeeId == id).FirstOrDefault();
-            return View(employee);
-        }
-
-        public ActionResult EditPerDetail(int id)
-        {
-            var employee = _dbContext.Employees.Where(x => x.EmployeeId == id).FirstOrDefault();
-            return View(employee);
-        }
-
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult EditPerDetail(Employee employee)
-        {
-            var id = (int)Session["EmpId"];
-            var empObj = _dbContext.Employees.FirstOrDefault(m => m.EmployeeId == id);
-
-            if (empObj != null)
-            {
-                empObj.Email = employee.Email;
-                empObj.FirstName = employee.FirstName;
-                empObj.LastName = employee.LastName;
-                empObj.DOB = employee.DOB;
-                empObj.Gender = employee.Gender;
-
-                _dbContext.Entry(empObj).State = EntityState.Modified;
-                TempData["AlertMessage"] = "Edit Details Sucessfully...";
-                _dbContext.Configuration.ValidateOnSaveEnabled = false;
-                _dbContext.SaveChanges();
-                _dbContext.Configuration.ValidateOnSaveEnabled = true;
-            }
-            return RedirectToAction("ShowEmpDetails");
-        }
-
         public ActionResult EditEmp(int? id)
         {
             var empObj = _dbContext.Employees.Where(x => x.EmployeeId == id).FirstOrDefault();
@@ -113,8 +76,7 @@ namespace mvc_task.Controllers
                 DepartmentNames = departmentNames,
                 EmployeeNames = employeeNames
             };
-
-            return View(viewModel);
+            return PartialView("_partialEditUserByDir",viewModel);
         }
 
         [HttpPost]
@@ -194,7 +156,7 @@ namespace mvc_task.Controllers
                 TempData["EmpId"] = id;
                 return View(task);
             }
-            return View();
+            return RedirectToAction("Index");
         }
 
         public ActionResult AppOrRejByDir(int? id, string btn)
@@ -209,8 +171,7 @@ namespace mvc_task.Controllers
                 _dbContext.SaveChanges();
             }
             int EmpId = (int)TempData["EmpId"];
-            var tasks = _dbContext.Tasks.Where(x => x.EmployeeId == EmpId).ToList();
-            return RedirectToAction("Index");
+            return RedirectToAction("Tasks", new {id = EmpId });
         }
 
         public ActionResult DeleteEmp(int? id)
