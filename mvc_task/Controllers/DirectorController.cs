@@ -76,7 +76,7 @@ namespace mvc_task.Controllers
                 DepartmentNames = departmentNames,
                 EmployeeNames = employeeNames
             };
-            return PartialView("_partialEditUserByDir",viewModel);
+            return PartialView("_EditUserByDir",viewModel);
         }
 
         [HttpPost]

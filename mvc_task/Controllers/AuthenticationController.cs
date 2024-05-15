@@ -9,6 +9,8 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using System.Web.Security;
+using System.Security.Cryptography;
+using System.Text;
 
 namespace mvc_task.Controllers
 {
@@ -33,18 +35,22 @@ namespace mvc_task.Controllers
             bool existingEmp = _dbContext.Employees.Any(u => u.Email == employee.Email);
             if (existingEmp)
             {
-                Console.WriteLine("Error");
-                ModelState.AddModelError("Emal", "Email already exists. Please enter another email address.");
+                ModelState.AddModelError("Email", "Email already exists. Please enter another email address.");
             }
+
+            ModelState.Remove("DepartmentId");
+            ModelState.Remove("ReportingPerson");
             if (ModelState.IsValid)
             {
                 employee.DepartmentId = 1;
                 employee.ReportingPerson = 1;
+                employee.Password = HashPassword(employee.Password);
                 _dbContext.Employees.Add(employee);
                 _dbContext.SaveChanges();
                 TempData["AlertMessage"] = "Register sucessfully...";
                 return RedirectToAction("login");
             }
+            ModelState.AddModelError("", "Somthing went wrong");
             return View(employee);
         }
 
@@ -58,8 +64,9 @@ namespace mvc_task.Controllers
         {
             try
             {
+                var hashPass = HashPassword(employee.Password);
                 var obj = _dbContext.Employees
-                     .Where(user => user.Email == employee.Email && user.Password == employee.Password)
+                     .Where(user => user.Email == employee.Email && user.Password == hashPass)
                      .FirstOrDefault();
 
                 if (obj != null)
@@ -72,7 +79,7 @@ namespace mvc_task.Controllers
                     TempData["AlertMessage"] = "Login sucessfully...";
                     if ((int)Session["Department"] == 1)
                     {
-                        return RedirectToAction("Index", "Employee");
+                        return RedirectToAction("AllTasks", "Task");
                     }
                     else if ((int)Session["Department"] == 2)
                     {
@@ -84,7 +91,7 @@ namespace mvc_task.Controllers
                     }
                     else
                     {
-                        ModelState.AddModelError("", "Somthing went wrong");
+                        ModelState.AddModelError("Email", "Somthing went wrong");
                         return View();
                     }
                 }
@@ -96,7 +103,7 @@ namespace mvc_task.Controllers
             }
             catch (Exception ex)
             {
-                ModelState.AddModelError("", "An error occurred while attempting to log in. Please try again later.");
+                ModelState.AddModelError("", "An error occurred while attempting to login. Please try again later.");
                 return View(employee);
             }
         }
@@ -115,10 +122,7 @@ namespace mvc_task.Controllers
                 var empObj = _dbContext.Employees.FirstOrDefault(m => m.Email == employee.Email);
                 if (empObj != null)
                 {
-                    empObj.Password = employee.Password;
-
-                    ModelState.Remove("Email");
-
+                    empObj.Password = HashPassword(employee.Password);
                     _dbContext.Entry(empObj).State = EntityState.Modified;
 
                     _dbContext.Configuration.ValidateOnSaveEnabled = false;
@@ -130,7 +134,7 @@ namespace mvc_task.Controllers
                 }
                 else
                 {
-                    ModelState.AddModelError("", "Please Enter Registered Email");
+                    ModelState.AddModelError("Email", "Please Enter Registered Email");
                     return View();
                 }
             }
@@ -144,5 +148,20 @@ namespace mvc_task.Controllers
             TempData["AlertMessage"] = "Logout Sucessfully...";
             return RedirectToAction("Login");
         }
+
+        private string HashPassword(string password)
+        {
+            using (SHA256 sha256 = SHA256.Create())
+            {
+                byte[] hashedBytes = sha256.ComputeHash(Encoding.UTF8.GetBytes(password));
+                StringBuilder builder = new StringBuilder();
+                foreach (byte b in hashedBytes)
+                {
+                    builder.Append(b.ToString("x2"));
+                }
+                return builder.ToString();
+            }
+        }
+
     }
 }

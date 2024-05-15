@@ -22,13 +22,12 @@ namespace mvc_task.Models
             [Display(Name = "Email", ResourceType = typeof(StringResources))]
             [Required(ErrorMessageResourceName = "RequiredError", ErrorMessageResourceType = typeof(StringResources))]
             [DataType(DataType.EmailAddress, ErrorMessageResourceName = "EmailError", ErrorMessageResourceType = typeof(StringResources))]
-            
             public string Email { get; set; }
 
             [Display(Name = "Pass", ResourceType = typeof(StringResources))]
             [Required(ErrorMessageResourceName = "RequiredError", ErrorMessageResourceType = typeof(StringResources))]
             [DataType(DataType.Password)]
-            [RegularExpression("^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&]{8,}$", ErrorMessageResourceName = "PassError", ErrorMessageResourceType = typeof(StringResources))]
+            //[RegularExpression("^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&]{8,}$", ErrorMessageResourceName = "PassError", ErrorMessageResourceType = typeof(StringResources))]
             public string Password { get; set; }
 
             [Display(Name = "FName", ResourceType = typeof(StringResources))]

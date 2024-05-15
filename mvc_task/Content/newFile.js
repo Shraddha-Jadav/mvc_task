@@ -1,7 +1,6 @@
-﻿
-//add or update task by employee
-$(document).ready(function () {
-    $(document).on('click', '.AddTask', function () {
+﻿//add or update task by employee
+$(document).ready(function() {
+    $(document).on('click', '.AddTask', function() {
         var id = $(this).data('id');
         $('.modal-body').html('');
         if (id == undefined) {
@@ -12,7 +11,7 @@ $(document).ready(function () {
             method: "GET",
             url: "/Task/AddTask/" + id,
             contentType: false,
-            success: function (response) {
+            success: function(response) {
                 $('.modal-body').append(response);
                 $('#myModal').modal('show');
                 $.validator.unobtrusive.parse($("#formData"));
@@ -21,7 +20,7 @@ $(document).ready(function () {
     });
 
     //edit personal detail
-    $(document).on('click', '.editDetail', function () {
+    $(document).on('click', '.editDetail', function() {
         var id = $(this).data('id');
         $('.modal-body').html('');
         $('#myModal').modal('show');
@@ -29,7 +28,7 @@ $(document).ready(function () {
             method: "GET",
             url: "/PersonalDetail/EditPerDetail/" + id,
             contentType: false,
-            success: function (response) {
+            success: function(response) {
                 $('.modal-body').append(response);
                 $('#myModal').modal('show');
                 $.validator.unobtrusive.parse($("#formData"));
@@ -38,7 +37,7 @@ $(document).ready(function () {
     });
 
     //edit personal detail of employee/Manager by director
-    $(document).on('click', '.editUserDetail', function () {
+    $(document).on('click', '.editUserDetail', function() {
         var id = $(this).data('id');
         $('.modal-body').html('');
         $('#myModal').modal('show');
@@ -46,18 +45,18 @@ $(document).ready(function () {
             method: "GET",
             url: "/Director/EditEmp/" + id,
             contentType: false,
-            success: function (response) {
+            success: function(response) {
                 $('.modal-body').append(response);
                 $('#myModal').modal('show');
                 $.validator.unobtrusive.parse($("#formData"));
-                $('#ddlDepartment').change(function () {
+                $('#ddlDepartment').change(function() {
                     $.ajax({
                         type: "post",
                         url: "/Director/GetReportingPer",
                         data: { departmentId: $('#ddlDepartment').val() },
                         datatype: "json",
                         traditional: true,
-                        success: function (data) {
+                        success: function(data) {
                             debugger;
                             var Employee = $("#ddlEmployeeName");
                             Employee.empty();
@@ -80,17 +79,19 @@ $(document).ready(function () {
     });
 
     //approve or reject task by manager
-    $("#taskTable").on("click", ".approveBtn, .rejectBtn", function () {
-        var taskId = $(this).data("taskid");
-        var btn = $(this).data("btn");
+    $(document).ready(function() {
+        $(".approveBtn, .rejectBtn").click(function() {
+            var taskId = $(this).data("taskid");
+            var btn = $(this).data("btn");
 
-        $.ajax({
-            type: "POST",
-            url: "/Manager/AppOrRejByManager",
-            data: { id: taskId, btn: btn },
-            success: function (response) {
-                $("#taskTable").html(response);
-            }
+            $.ajax({
+                type: "POST",
+                url: "@Url.Action(", AppOrRejByManager, ", ": Manager, ")": ,
+                data: { id: taskId, btn: btn },
+                success: function(response) {
+                    $("#taskTable").html(response);
+                }
+            });
         });
     });
 });

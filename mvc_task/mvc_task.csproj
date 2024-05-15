@@ -129,12 +129,12 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="Controllers\AuthenticationController.cs" />
     <Compile Include="Controllers\DirectorController.cs" />
-    <Compile Include="Controllers\EmployeeController.cs" />
     <Compile Include="Controllers\ManagerController.cs" />
     <Compile Include="Controllers\PersonalDetailController.cs" />
     <Compile Include="Controllers\TaskController.cs" />
     <Compile Include="CustomeModel\EditUserViewModel.cs" />
     <Compile Include="CustomeModel\Employee.cs" />
+    <Compile Include="CustomeModel\JqueryDatatableParam.cs" />
     <Compile Include="CustomeModel\Task.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -2072,20 +2072,20 @@
     <Content Include="Views\Shared\_Layout.cshtml" />
     <Content Include="Views\Authentication\Register.cshtml" />
     <Content Include="Views\Authentication\Login.cshtml" />
-    <Content Include="Views\Employee\Index.cshtml" />
     <Content Include="Views\Authentication\ResetPass.cshtml" />
     <Content Include="Views\Director\AllStaff.cshtml" />
     <Content Include="Views\Director\Tasks.cshtml" />
     <Content Include="Views\Manager\Index.cshtml" />
     <Content Include="Views\Manager\Tasks.cshtml" />
     <Content Include="Views\Director\Index.cshtml" />
-    <Content Include="Views\Shared\_partialPageTask.cshtml" />
-    <Content Include="Views\Shared\_partialUserEditForm.cshtml" />
-    <Content Include="Views\Shared\_partialEditUserByDir.cshtml" />
+    <Content Include="Views\Shared\_PageTask.cshtml" />
+    <Content Include="Views\Shared\_UserEditForm.cshtml" />
+    <Content Include="Views\Shared\_EditUserByDir.cshtml" />
     <Content Include="Views\PersonalDetail\ShowEmpDetails.cshtml" />
     <Content Include="Views\PersonalDetail\Index.cshtml" />
     <Content Include="Views\Task\AllTasks.cshtml" />
     <Content Include="Views\Manager\EmployeeList.cshtml" />
+    <Content Include="Views\Shared\_TaskTable.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

@@ -34,26 +34,43 @@ namespace mvc_task.Controllers
             if (id != null)
             {
                 var task = _dbContext.Tasks.Where(x => x.EmployeeId == id).ToList();
-                TempData["EmpId"] = id;
+                Session["TaskEmpId"] = id;
                 return View(task);
+                //return RedirectToAction("_TaskTable", task);
             }
             return View();
         }
 
-        public ActionResult AppOrRejByManger(int? id, string btn)
+        //public ActionResult AppOrRejByManger(int? id, string btn)
+        //{
+        //    if (id != null)
+        //    {
+        //        var taskObj = _dbContext.Tasks.Where(x => x.TaskID == id).FirstOrDefault();
+        //        taskObj.ApprovedOrRejectedBy = (int)Session["EmpId"];
+        //        taskObj.ApprovedOrRejectedOn = DateTime.Now;
+        //        taskObj.Status = btn == "approve" ? "Approved" : "Rejected";
+        //        _dbContext.Entry(taskObj).State = EntityState.Modified;
+        //        _dbContext.SaveChanges();
+        //    }
+        //    int EmpId = (int)TempData["EmpId"];
+        //    var tasks = _dbContext.Tasks.Where(x => x.EmployeeId == EmpId).ToList();
+        //    return RedirectToAction("Index");
+        //}
+
+        [HttpPost]
+        public ActionResult AppOrRejByManager(int id, string btn)
         {
-            if (id != null)
+            var taskObj = _dbContext.Tasks.FirstOrDefault(x => x.TaskID == id);
+            if (taskObj != null)
             {
-                var taskObj = _dbContext.Tasks.Where(x => x.TaskID == id).FirstOrDefault();
                 taskObj.ApprovedOrRejectedBy = (int)Session["EmpId"];
                 taskObj.ApprovedOrRejectedOn = DateTime.Now;
                 taskObj.Status = btn == "approve" ? "Approved" : "Rejected";
-                _dbContext.Entry(taskObj).State = EntityState.Modified;
                 _dbContext.SaveChanges();
             }
-            int EmpId = (int)TempData["EmpId"];
+            int EmpId = (int)Session["TaskEmpId"];
             var tasks = _dbContext.Tasks.Where(x => x.EmployeeId == EmpId).ToList();
-            return RedirectToAction("Index");
+            return PartialView("_TaskTable", tasks);
         }
     }
 }

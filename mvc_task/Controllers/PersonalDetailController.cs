@@ -32,7 +32,7 @@ namespace mvc_task.Controllers
         public ActionResult EditPerDetail(int id)
         {
             var employee = _dbContext.Employees.Where(x => x.EmployeeId == id).FirstOrDefault();
-            return PartialView("_partialUserEditForm", employee);
+            return PartialView("_UserEditForm", employee);
         }
 
         [HttpPost]

@@ -35,12 +35,12 @@ namespace mvc_task.Controllers
             if (id == 0)
             {
                 Task task = new Task();
-                return PartialView("_PartialPageTask", task);
+                return PartialView("_PageTask", task);
             }
             else
             {
                 var task = _dbContext.Tasks.Where(x => x.TaskID == id).FirstOrDefault();
-                return PartialView("_PartialPageTask", task);
+                return PartialView("_PageTask", task);
             }
         }
 
@@ -65,7 +65,8 @@ namespace mvc_task.Controllers
                 task.ApproverId = 1;
                 _dbContext.Tasks.AddOrUpdate(task);
                 _dbContext.SaveChanges();
-                TempData["AlertMessage"] = "Add task sucessfully...";
+                TempData["AlertMessage"] = task.TaskID == 0? "Edit task sucessfully..." : "Add task sucessfully...";
+                
                 return RedirectToAction("AllTasks");
             }
             return View();
@@ -81,6 +82,13 @@ namespace mvc_task.Controllers
                 TempData["AlertMessage"] = "Delete task sucessfully...";
             }
             return RedirectToAction("AllTasks");
+        }
+
+        [HttpPost]
+        public ActionResult GetList()
+        {
+            var TaskList = _dbContext.Tasks.ToList();
+            return Json(new { data = TaskList }, JsonRequestBehavior.AllowGet);
         }
     }
 }
