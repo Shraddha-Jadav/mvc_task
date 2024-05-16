@@ -72,7 +72,6 @@ namespace mvc_task.Controllers
                 if (obj != null)
                 {
                     Session["EmpId"] = obj.EmployeeId;
-                    Session["Email"] = obj.Email;
                     Session["Name"] = obj.FirstName;
                     Session["Department"] = obj.DepartmentId;
                     FormsAuthentication.SetAuthCookie(obj.Email, false);

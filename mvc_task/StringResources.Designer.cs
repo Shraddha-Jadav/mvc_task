@@ -70,7 +70,7 @@ namespace mvc_task {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Approved Or Rejected By.
+        ///   Looks up a localized string similar to Approved/Rejected By.
         /// </summary>
         public static string AppOrRejBy {
             get {
@@ -79,7 +79,7 @@ namespace mvc_task {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Approved Or Rejected On.
+        ///   Looks up a localized string similar to Approved/Rejected On.
         /// </summary>
         public static string AppOrRejOn {
             get {

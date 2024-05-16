@@ -122,11 +122,11 @@
     <comment>Approver Id</comment>
   </data>
   <data name="AppOrRejBy" xml:space="preserve">
-    <value>Approved Or Rejected By</value>
+    <value>Approved/Rejected By</value>
     <comment>Approved Or Rejected By</comment>
   </data>
   <data name="AppOrRejOn" xml:space="preserve">
-    <value>Approved Or Rejected On</value>
+    <value>Approved/Rejected On</value>
     <comment>Approved Or Rejected On</comment>
   </data>
   <data name="CreatedOn" xml:space="preserve">

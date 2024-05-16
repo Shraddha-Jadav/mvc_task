@@ -49,7 +49,6 @@ namespace mvc_task.Controllers
                 empObj.DOB = employee.DOB;
                 empObj.Gender = employee.Gender;
 
-                Session["Email"] = employee.Email;
                 Session["Name"] = employee.FirstName;
                 _dbContext.Entry(empObj).State = EntityState.Modified;
                 TempData["AlertMessage"] = "Edit Details Sucessfully...";

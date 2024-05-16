@@ -18,35 +18,35 @@ namespace mvc_task.Models
             [Required(ErrorMessageResourceName = "RequiredError", ErrorMessageResourceType = typeof(StringResources))]
             public Nullable<System.DateTime> TaskDate { get; set; }
 
-            [Display(Name = "EmpId")]
+            [Display(Name = "EmpId", ResourceType = typeof(StringResources))]
             public Nullable<int> EmployeeId { get; set; }
 
-            [Display(Name = "TaskName")]
+            [Display(Name = "TaskName", ResourceType = typeof(StringResources))]
             [Required(ErrorMessageResourceName = "RequiredError", ErrorMessageResourceType = typeof(StringResources))]
             public string TaskName { get; set; }
 
-            [Display(Name = "TaskDesc")]
+            [Display(Name = "TaskDesc", ResourceType = typeof(StringResources))]
             [Required(ErrorMessageResourceName = "RequiredError", ErrorMessageResourceType = typeof(StringResources))]
             public string TaskDescription { get; set; }
 
-            [Display(Name = "AppID")]
+            [Display(Name = "AppID", ResourceType = typeof(StringResources))]
             public Nullable<int> ApproverId { get; set; }
 
-            [Display(Name = "AppOrRejBy")]
+            [Display(Name = "AppOrRejBy", ResourceType = typeof(StringResources))]
             public Nullable<int> ApprovedOrRejectedBy { get; set; }
 
-            [Display(Name = "AppOrRejOn")]
+            [Display(Name = "AppOrRejOn", ResourceType = typeof(StringResources))]
             [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
             public Nullable<System.DateTime> ApprovedOrRejectedOn { get; set; }
 
-            [Display(Name = "Status")]
+            [Display(Name = "Status", ResourceType = typeof(StringResources))]
             public string Status { get; set; }
 
-            [Display(Name = "CreatedOn")]
+            [Display(Name = "CreatedOn", ResourceType = typeof(StringResources))]
             [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
             public Nullable<System.DateTime> CreatedOn { get; set; }
 
-            [Display(Name = "ModifiedOn")]
+            [Display(Name = "ModifiedOn", ResourceType = typeof(StringResources))]
             [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
             public Nullable<System.DateTime> ModifiedOn { get; set; }
 

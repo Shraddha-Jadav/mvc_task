@@ -1,8 +1,12 @@
-﻿using mvc_task.Models;
+﻿using mvc_task.CustomeModel;
+using mvc_task.Models;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.Data.Entity;
 using System.Data.Entity.Migrations;
 using System.Linq;
+using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Web;
 using System.Web.Mvc;
@@ -21,13 +25,7 @@ namespace mvc_task.Controllers
 
         public ActionResult AllTasks()
         {
-            var tasks = _dbContext.Tasks.ToList();
-            int empId = (int)Session["EmpId"];
-            var empName = (from e in _dbContext.Employees
-                           where e.EmployeeId == empId
-                           select e.FirstName).FirstOrDefault();
-            ViewBag.name = empName;
-            return View(tasks);
+            return View();
         }
 
         public ActionResult AddTask(int id) //Action for open partial view for add or update task
@@ -65,11 +63,11 @@ namespace mvc_task.Controllers
                 task.ApproverId = 1;
                 _dbContext.Tasks.AddOrUpdate(task);
                 _dbContext.SaveChanges();
-                TempData["AlertMessage"] = task.TaskID == 0? "Edit task sucessfully..." : "Add task sucessfully...";
-                
-                return RedirectToAction("AllTasks");
+                TempData["AlertMessage"] = task.TaskID == 0 ? "Edit task sucessfully..." : "Add task sucessfully...";
+
+                return Json(new { success = true, task = task });
             }
-            return View();
+            return Json(new { success = false, errors = ModelState.Values.SelectMany(v => v.Errors).Select(e => e.ErrorMessage) });
         }
 
         public ActionResult DeleteTask(int id)
@@ -89,6 +87,90 @@ namespace mvc_task.Controllers
         {
             var TaskList = _dbContext.Tasks.ToList();
             return Json(new { data = TaskList }, JsonRequestBehavior.AllowGet);
+        }
+
+        [HttpPost]
+        public ActionResult EmployeeTasks(JqueryDatatableParams model)
+        {
+            var loggedInEmployee = _dbContext.Employees.FirstOrDefault(e => e.Email == User.Identity.Name);
+
+            if (loggedInEmployee != null)
+            {
+                var tasks = _dbContext.Tasks.Where(t => t.EmployeeId == loggedInEmployee.EmployeeId).ToList();
+
+                if (!string.IsNullOrEmpty(model.search?.value))
+                {
+                    string searchValue = model.search.value.ToLower();
+                    tasks = tasks.Where(t =>
+                        t.TaskID.ToString().Contains(searchValue) ||
+                        t.TaskDate.ToString().Contains(searchValue) ||
+                        t.TaskName.ToLower().Contains(searchValue) ||
+                        t.TaskDescription.ToLower().Contains(searchValue) ||
+                        t.Employee2.FirstName.ToLower().Contains(searchValue) ||
+                        t.Employee2.LastName.ToLower().Contains(searchValue) ||
+                        t.Employee1.FirstName.ToLower().Contains(searchValue) ||
+                        t.Employee1.LastName.ToLower().Contains(searchValue) ||
+                        t.Status.ToLower().Contains(searchValue) ||
+                        (t.CreatedOn.HasValue && t.CreatedOn.Value.ToString("yyyy-MM-dd").Contains(searchValue)) ||
+                        (t.ModifiedOn.HasValue && t.ModifiedOn.Value.ToString("yyyy-MM-dd").Contains(searchValue))
+                    ).ToList();
+                }
+                var recordsTotal = tasks.Count();
+
+                if (model.order != null && model.order.Count > 0)
+                {
+                    var order = model.order[0];
+                    string columnName = model.columns[order.column].data;
+                    bool isAscending = order.dir == "asc";
+
+                    if (!string.IsNullOrEmpty(columnName))
+                    {
+                        var propertyInfo = typeof(Task).GetProperty(columnName, BindingFlags.IgnoreCase | BindingFlags.Public | BindingFlags.Instance);
+
+                        if (propertyInfo != null)
+                        {
+                            if (isAscending)
+                            {
+                                tasks = tasks.OrderBy(p => propertyInfo.GetValue(p, null)).ToList();
+                            }
+                            else
+                            {
+                                tasks = tasks.OrderByDescending(p => propertyInfo.GetValue(p, null)).ToList();
+                            }
+                        }
+                    }
+                }
+
+                var data = tasks
+                    .Skip(model.start)
+                    .Take(model.length)
+                    .Select(t => new
+                    {
+                        t.TaskID,
+                        t.TaskName,
+                        t.TaskDescription,
+                        TaskDate = t.TaskDate.HasValue ? t.CreatedOn.Value.ToString("yyyy-MM-dd") : string.Empty,
+                        t.Status,
+                        ApprovedOrRejectedOn = t.ApprovedOrRejectedOn.HasValue ? t.CreatedOn.Value.ToString("yyyy-MM-dd") : string.Empty,
+                        CreatedOn = t.CreatedOn.HasValue ? t.CreatedOn.Value.ToString("yyyy-MM-dd") : string.Empty,
+                        ModifiedOn = t.ModifiedOn.HasValue ? t.ModifiedOn.Value.ToString("yyyy-MM-dd") : string.Empty
+                    })
+                    .ToList();
+
+                var jsonData = new
+                {
+                    draw = model.draw,
+                    recordsTotal = tasks.Count,
+                    recordsFiltered = recordsTotal,
+                    data
+                };
+
+                return Content(JsonConvert.SerializeObject(jsonData), "application/json");
+            }
+            else
+            {
+                return RedirectToAction("Login");
+            }
         }
     }
 }

@@ -1,11 +1,11 @@
 ﻿@model IEnumerable<mvc_task.Models.Task>
 
 @{
-    ViewBag.Title = "Deshboard";
     Layout = "~/Views/Shared/_Layout.cshtml";
     int id = (int)Session["EmpId"];
 }
 
+<!--Alert Message-->
 @if (TempData["AlertMessage"] != null)
 {
     <div class="d-flex justify-content-end">
@@ -23,93 +23,41 @@
 
 }
 
-<div class="d-flex justify-content-end">
-    <button type="button" data-id="0" class="btn btn-sm btn-success AddTask my-4">Add Task</button>
+<div class="d-flex justify-content-between">
+    <h2 class=" my-3">My Tasks</h2>
+    <button type="button" data-id="0" class="btn btn-sm btn-success AddTask my-3">Add Task</button>
 </div>
 
 
 <table class="table w-100" id="taskTable">
     <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.TaskDate)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.TaskName)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.TaskDescription)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Status)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.ApprovedOrRejectedOn)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.CreatedOn)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.ModifiedOn)
-            </th>
-            <th>Actions</th>
-        </tr>
+    <th>
+        @Html.DisplayNameFor(model => model.TaskName)
+    </th>
+    <th>
+        @Html.DisplayNameFor(model => model.TaskDescription)
+    </th>
+    <th>
+        @Html.DisplayNameFor(model => model.TaskDate)
+    </th>
+    <th>
+        @Html.DisplayNameFor(model => model.Status)
+    </th>
+    <th>
+        @Html.DisplayNameFor(model => model.ApprovedOrRejectedOn)
+    </th>
+    <th>
+        @Html.DisplayNameFor(model => model.CreatedOn)
+    </th>
+    <th>
+        @Html.DisplayNameFor(model => model.ModifiedOn)
+    </th>
+    <th>
+        @Html.DisplayName("Actions")
+    </th>
+    </tr>
     </thead>
     <tbody>
-
-        @foreach (var item in Model)
-        {
-            if (item.EmployeeId == (int?)Session["EmpId"])
-            {
-                <tr>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.TaskDate)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.TaskName)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.TaskDescription)
-                    </td>
-                    <td>
-                        @{
-                            string textColor;
-                            switch (item.Status)
-                            {
-                                case "Pending":
-                                    textColor = "#ff9966";
-                                    break;
-                                case "Approved":
-                                    textColor = "green";
-                                    break;
-                                default:
-                                    textColor = "red";
-                                    break;
-                            }
-                        }
-                        <span style="color: @textColor;">
-                            @Html.DisplayFor(modelItem => item.Status)
-                        </span>
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.ApprovedOrRejectedOn)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.CreatedOn)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.ModifiedOn)
-                    </td>
-                    <td>
-                        @if (item.Status == "Pending")
-                        {
-                            <button type="button" data-id="@item.TaskID" class="btn btn-sm btn-warning px-3 AddTask">Edit</button>
-                        }
-                        @Html.ActionLink("Delete", "DeleteTask", new { id = item.TaskID }, new { @class = "btn btn-danger btn-sm" })
-                    </td>
-                </tr>
-            }
-        }
     </tbody>
 </table>
 
@@ -121,7 +69,7 @@
                 <h2 class="modal-title">Task Log</h2>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            <div class="modal-body">
+            <div class="modal-body task-modal-body">
 
             </div>
         </div>
@@ -133,29 +81,38 @@
     @Scripts.Render("~/bundles/jqueryval")
     <script>
         $(document).ready(function () {
-            //$("#taskTable").DataTable({
-            //    "serverside": "true",
-            //    "processing":"true",
-            //    "ajax": {
-            //        "url": "/Employee/GetList",
-            //        "type": "post",
-            //        "datatype": "json"
-            //    },
+            $("#taskTable").DataTable({
+                "serverSide": true,
+                "processing": true,
+                "ajax": {
+                    "url": "/Task/EmployeeTasks",
+                    "type": "post",
+                    "datatype": "json"
+                },
 
-            //    "columns": [
-            //        { "data": "TaskDate" },
-            //        { "data": "TaskName" },
-            //        { "data": "TaskDescription" },
-            //        { "data": "ApproverId" },
-            //        { "data": "ApprovedOrRejectedBy" },
-            //        { "data": "ApprovedOrRejectedOn" },
-            //        { "data": "Status" },
-            //        { "data": "CreatedOn" },
-            //        { "data": "ModifiedOn" }
-            //    ]
-            //});
-
-            $("#taskTable").DataTable();
+                "columns": [
+                    { "data": "TaskName" },
+                    { "data": "TaskDescription" },
+                    { "data": "TaskDate" },
+                    {
+                        "data": null,
+                        "render": function (data, type, row, meta) {
+                            var color = row.Status == "Pending" ? "warning" : row.Status == "Approved" ? "success" : "danger";
+                            return '<p class="rounded-pill btn-sm btn border-' + color + ' text-' + color + '">' + row.Status + '</p>'
+                        }
+                    },
+                    { "data": "ApprovedOrRejectedOn" },
+                    { "data": "CreatedOn" },
+                    { "data": "ModifiedOn" },
+                    {
+                        "data": null,
+                        "render": function (data, type, row, meta) {
+                            return '<button type="button" data-id="' + row.TaskID + '" class="btn btn-sm btn-warning px-3 AddTask">Edit</button>&nbsp' +
+                                '<a href="/Task/DeleteTask/' + row.TaskID + '" class="btn btn-danger btn-sm" onclick="return confirm(\'Are you sure you want to delete this task?\')">Delete</a>';
+                        }
+                    },
+                ]
+            });
         })
     </script>
 }

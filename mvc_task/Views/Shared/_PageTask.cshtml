@@ -1,7 +1,7 @@
 ﻿
 @model mvc_task.Models.Task
 
-<form class="pt-3" method="post" id="formData" action="/Task/submitTask">
+<form class="pt-3" method="post" id="taskForm" action="/Task/submitTask">
     @Html.AntiForgeryToken()
     @Html.ValidationSummary(true, "", new { @class = "text-danger" })
 
