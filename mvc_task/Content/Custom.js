@@ -20,7 +20,7 @@ $(document).ready(function () {
         });
     });
 
-    //save data in model 
+    //save data in model after add or update task
     $(document).on('submit', '#taskForm', function (e) {
         e.preventDefault();
         $.ajax({
@@ -30,7 +30,7 @@ $(document).ready(function () {
             success: function (response) {
                 if (response.success) {
                     $('#myModal').modal('hide');
-                    updateDataTable(response.task);
+                    $('#taskTable').DataTable().ajax.reload();
                 } else {
                     alert('Error: ' + response.errors.join(', '));
                 }
@@ -38,55 +38,53 @@ $(document).ready(function () {
         });
     });
 
-    //update datatable without reload
-    function updateDataTable(task) {
-        debugger;
-        var color = task.Status == "Pending" ? "warning" : row.Status == "Approved" ? "success" : "danger";
-        if (task.TaskID === 0) {
-            $('#taskTable').DataTable().row.add([
-                task.TaskName,
-                task.TaskDescription,
-                task.TaskDate,
-                '<p class="rounded-pill btn-sm btn border-' + color + ' text-' + color + '">' + task.Status + '</p>',
-                task.ApprovedOrRejectedOn,
-                task.CreatedOn,
-                task.ModifiedOn,
-                '<button type="button" data-id="' + task.TaskID + '" class="btn btn-sm btn-warning px-3 AddTask">Edit</button>&nbsp' +
-                '<a href="/Task/DeleteTask/' + task.TaskID + '" class="btn btn-danger btn-sm" onclick="return confirm(\'Are you sure you want to delete this task?\')">Delete</a>'
-            ]).draw();
-
-        } else {
-            var table = $('#taskTable').DataTable();
-            var rowIndex = table.row('#row_' + task.TaskID).index();
-            table.row(rowIndex).data([
-                task.TaskName,
-                task.TaskDescription,
-                task.TaskDate,
-                '<p class="rounded-pill btn-sm btn border-' + color + ' text-' + color + '">' + task.Status + '</p>',
-                task.ApprovedOrRejectedOn,
-                task.CreatedOn,
-                task.ModifiedOn,
-                '<button type="button" data-id="' + task.TaskID + '" class="btn btn-sm btn-warning px-3 AddTask">Edit</button>&nbsp' +
-                '<a href="/Task/DeleteTask/' + task.TaskID + '" class="btn btn-danger btn-sm" onclick="return confirm(\'Are you sure you want to delete this task?\')">Delete</a>'
-            ]).draw();
-        }
-    }
-
     //edit personal detail
     $(document).on('click', '.editDetail', function () {
         var id = $(this).data('id');
-        $('.task-modal-body').html('');
+        $('.editPerDetail-modal-body').html('');
         $.ajax({
             method: "GET",
             url: "/PersonalDetail/EditPerDetail/" + id,
             contentType: false,
             success: function (response) {
-                $('.task-modal-body').append(response);
+                $('.editPerDetail-modal-body').append(response);
                 $('#myModal').modal('show');
                 $.validator.unobtrusive.parse($("#formData"));
             }
         });
     });
+
+    $(document).on('submit', '#editDetailForm', function (e) {
+        e.preventDefault();
+        $.ajax({
+            method: "POST",
+            url: "/PersonalDetail/UpdateDetails",
+            data: $(this).serialize(),
+            success: function (response) {
+                if (response.success) {
+                    $('#myModal').modal('hide');
+                    console.log(response.employee.FirstName)
+                    console.log($("#firstName"))
+                    $('#firstName').text(response.employee.FirstName);
+                    $('#lastName').text(response.employee.LastName);
+
+                    var dateString = response.employee.DOB;
+                    var milliseconds = dateString.match(/\d+/)[0];
+                    var date = new Date(parseInt(milliseconds));
+                    var formattedDate = date.toLocaleDateString();
+                    $('#dob').text(formattedDate);
+
+                    if (response.employee.Gender == "F")
+                        $('#gender').text("Female");
+                    else
+                        $('#gender').text("Male");
+                } else {
+                    alert('Error: ' + response.error);
+                }
+            }
+        });
+    });
+
 
     //edit personal detail of employee/Manager by director
     $(document).on('click', '.editUserDetail', function () {
@@ -108,7 +106,6 @@ $(document).ready(function () {
                         datatype: "json",
                         traditional: true,
                         success: function (data) {
-                            debugger;
                             var Employee = $("#ddlEmployeeName");
                             Employee.empty();
                             console.log(data);
@@ -143,5 +140,60 @@ $(document).ready(function () {
             }
         });
     });
-    
+
+    //nested datatable to show tasks of employee
+    $("#empListTable").on('click', '.showTask', function () {
+        var empId = $(this).data('empid');
+        var employeeRow = $(this).closest("tr");
+        var nestedTableRow = employeeRow.next(".nested-table-row");
+
+        $(".nested-table-row").not(nestedTableRow).hide();
+
+        if (nestedTableRow.length) {
+            nestedTableRow.toggle();
+        } else {
+            $.ajax({
+                type: "POST",
+                url: "/Director/GetEmployeeTasks",
+                data: { empId: empId },
+                success: function (response) {
+                    if (response.success) {
+                        console.log("success");
+
+                        var nestedTable = `
+                        <table id="nestedTable" class="bg-white">
+                            <thead>
+                                <tr>
+                                    <th>Task Id</th>
+                                    <th>Task Name</th>
+                                    <th>Task Description</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                ${response.tasks.map(task => `
+                                    <tr>
+                                        <td>${task.TaskId}</td>
+                                        <td>${task.TaskName}</td>
+                                        <td>${task.TaskDescription}</td>
+                                    </tr>
+                                `).join('')}
+                            </tbody>
+                        </table>`;
+
+                        employeeRow.after('<tr class="nested-table-row"><td colspan="7">' + nestedTable + '</td></tr>');
+                        $('.nested-table-row table').DataTable();
+                        console.log("success");
+                    } else {
+                        console.log("Error: " + response.error);
+                    }
+                },
+                error: function (xhr, textStatus, errorThrown) {
+                    console.log("Errorrrrrrrr");
+                    console.log("AJAX error: ", textStatus, errorThrown);
+                    console.log("Response: ", xhr.responseText);
+                }
+            });
+        }
+    });
+
 });

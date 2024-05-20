@@ -1,11 +1,14 @@
 ﻿
+using mvc_task.CustomeModel;
 using mvc_task.Models;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
 using System.Data.Entity;
+using System.Data.Entity.Migrations;
 using System.Linq;
-using System.Web;
+using System.Reflection;
+using System.Threading.Tasks;
 using System.Web.Mvc;
 using System.Web.UI.WebControls;
 
@@ -28,21 +31,44 @@ namespace mvc_task.Controllers
 
         public ActionResult AllStaff(int? id)
         {
-            if(id != null)
+            if (id != null)
             {
-                var employees = _dbContext.Employees.Where(x => x.DepartmentId == id).ToList();
-                ViewBag.DeptId = id;
-                int directorId = (int)Session["EmpId"];
-                string dirName = (from e in _dbContext.Employees where e.EmployeeId == directorId select e.FirstName).FirstOrDefault();
-                ViewBag.name = dirName;
-                return View(employees);
+                return View();
             }
             else
             {
                 return RedirectToAction("Index");
             }
-            
         }
+
+        public ActionResult GetEmployeeTasks(int? empId)
+        {
+            if(empId == null)
+            {
+                empId = 1043;
+            }
+            try
+            {
+                //passed only needed column to view ---- bcz - circular reference error
+                var tasks = _dbContext.Tasks
+                              .Where(x => x.EmployeeId == empId)
+                              .Select(t => new
+                              {
+                                  TaskId = t.TaskID,
+                                  TaskName = t.TaskName,
+                                  TaskDescription = t.TaskDescription
+                              })
+                              .ToList();
+                //var tasks = _dbContext.Tasks.Where(x => x.EmployeeId == empId).ToList();
+                return Json(new { success = true, tasks = tasks });
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                return Json(new { success = false, error = ex.Message });
+            }
+        }
+
 
         public ActionResult EditEmp(int? id)
         {
@@ -54,7 +80,7 @@ namespace mvc_task.Controllers
             {
                 departmentNames = _dbContext.Departments.Where(d => d.DepartmentId == 1 || d.DepartmentId == 2 || d.DepartmentId == 3).Select(d => new SelectListItem { Text = d.Name, Value = d.DepartmentId.ToString() }).ToList();
             }
-            else if(empObj.DepartmentId == 2)
+            else if (empObj.DepartmentId == 2)
             {
                 departmentNames = _dbContext.Departments.Where(d => d.DepartmentId == 2 || d.DepartmentId == 3).Select(d => new SelectListItem { Text = d.Name, Value = d.DepartmentId.ToString() }).ToList();
             }
@@ -76,7 +102,7 @@ namespace mvc_task.Controllers
                 DepartmentNames = departmentNames,
                 EmployeeNames = employeeNames
             };
-            return PartialView("_EditUserByDir",viewModel);
+            return PartialView("_EditUserByDir", viewModel);
         }
 
         [HttpPost]
@@ -171,16 +197,16 @@ namespace mvc_task.Controllers
                 _dbContext.SaveChanges();
             }
             int EmpId = (int)TempData["EmpId"];
-            return RedirectToAction("Tasks", new {id = EmpId });
+            return RedirectToAction("Tasks", new { id = EmpId });
         }
 
         public ActionResult DeleteEmp(int? id)
         {
             var emp = _dbContext.Employees.Find(id);
-            if(emp != null)
+            if (emp != null)
             {
                 var tasks = _dbContext.Tasks.Where(x => x.EmployeeId == id).ToList();
-                foreach(var task in tasks)
+                foreach (var task in tasks)
                 {
                     _dbContext.Tasks.Remove(task);
                 }
@@ -195,10 +221,10 @@ namespace mvc_task.Controllers
         public ActionResult DeleteManager(int? id)
         {
             var manager = _dbContext.Employees.Find(id);
-            if(manager != null)
+            if (manager != null)
             {
                 var empList = _dbContext.Employees.Where(x => x.ReportingPerson == id).ToList();
-                foreach(var emp in empList)
+                foreach (var emp in empList)
                 {
                     emp.ReportingPerson = manager.ReportingPerson;
                     _dbContext.Entry(emp).State = EntityState.Modified;
@@ -211,6 +237,79 @@ namespace mvc_task.Controllers
                 _dbContext.Configuration.ValidateOnSaveEnabled = true;
             }
             return RedirectToAction("Index");
+        }
+
+        [HttpPost]
+        public ActionResult EmployeeList(JqueryDatatableParams model)
+        {
+            var employees = _dbContext.Employees.Where(x => x.DepartmentId == 1).ToList();
+
+            if (!string.IsNullOrEmpty(model.search?.value))
+            {
+                string searchValue = model.search.value.ToLower();
+                employees = employees
+                .Where(e =>
+                    e.EmployeeId.ToString().Contains(searchValue) ||
+                    e.Email.ToLower().Contains(searchValue) ||
+                    e.FirstName.ToLower().Contains(searchValue) ||
+                    e.LastName.ToLower().Contains(searchValue) ||
+                    e.DOB.HasValue && e.DOB.Value.ToString("yyyy-MM-dd").Contains(searchValue) ||
+                    e.Gender.ToLower().Contains(searchValue) ||
+                    e.ReportingPerson.ToString().Contains(searchValue) ||
+                    e.EmployeeCode.ToLower().Contains(searchValue)
+                 ).ToList();
+            }
+
+            var recordsTotal = employees.Count();
+
+            if (model.order != null && model.order.Count > 0)
+            {
+                var order = model.order[0];
+                string columnName = model.columns[order.column].data;
+                bool isAscending = order.dir == "asc";
+
+                if (!string.IsNullOrEmpty(columnName))
+                {
+                    var propertyInfo = typeof(Employee).GetProperty(columnName, BindingFlags.IgnoreCase | BindingFlags.Public | BindingFlags.Instance);
+
+                    if (propertyInfo != null)
+                    {
+                        if (isAscending)
+                        {
+                            employees = employees.OrderBy(p => propertyInfo.GetValue(p, null)).ToList();
+                        }
+                        else
+                        {
+                            employees = employees.OrderByDescending(p => propertyInfo.GetValue(p, null)).ToList();
+                        }
+                    }
+                }
+            }
+
+            var data = employees
+                .Skip(model.start)
+                .Take(model.length)
+                .Select(e => new
+                {
+                    e.EmployeeId,
+                    e.EmployeeCode,
+                    e.Email,
+                    e.FirstName,
+                    e.LastName,
+                    e.DOB,
+                    e.Gender,
+                    e.ReportingPerson
+                }).ToList();
+
+            var jsonData = new
+            {
+                draw = model.draw,
+                recordsTotal = employees.Count,
+                recordsFiltered = recordsTotal,
+                data
+            };
+
+            return Content(JsonConvert.SerializeObject(jsonData), "application/json");
         }
     }
 }

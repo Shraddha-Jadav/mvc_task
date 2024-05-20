@@ -2,85 +2,37 @@
 @{
     ViewBag.Title = "Index";
     Layout = "~/Views/Shared/_Layout.cshtml";
-    int deptId = ViewBag.DeptId ?? 1;
 }
 
-<table class="table">
-    <tr>
-        <th>
-            @Html.DisplayNameFor(model => model.EmployeeCode)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Email)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.FirstName)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.LastName)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.DOB)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Gender)
-        </th>
-        <th>
-            @Html.DisplayName("Reporting Person")
-        </th>
-        <th>Actions</th>
-    </tr>
-
-    <h2>Employee</h2>
-    @foreach (var item in Model)
-    {
+<table class="table w-100" id="empListTable">
+    <thead>
         <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.EmployeeCode)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Email)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.FirstName)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.LastName)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.DOB)
-            </td>
-            <td>
-                @{
-                    string gender = item.Gender == "F" ? "Female" : "Male";
-                }
-                @Html.DisplayName(gender)
-            </td>
-            <td>
-                @if (deptId == 3)
-                {
-                    @Html.DisplayName("No reporting Person")
-                }
-                else
-                {
-                    @Html.DisplayFor(modelItem => item.Employee2.FirstName)
-                }
-            </td>
-            <td>
-                @if (deptId == 1 || deptId == 2)
-                {
-                    @Html.ActionLink("View Tasks", "Tasks", new { id = item.EmployeeId }, new { @class = "btn btn-primary btn-sm" })
-                    <button type="button" data-id=@item.EmployeeId class="btn btn-sm btn-success editUserDetail">Edit</button>
-                    @Html.ActionLink("Delete Emp", "DeleteEmp", new { id = item.EmployeeId }, new { @class = "btn btn-danger btn-sm", onclick = "return confirmDelete();" })
-                }
-                else if (deptId == 3)
-                {
-                    @Html.ActionLink("Edit Details", "EditEmp", new { id = item.EmployeeId }, new { @class = "btn btn-primary btn-sm" })
-                }
-            </td>
+            <th>
+                @Html.DisplayNameFor(model => model.EmployeeCode)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Email)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.FirstName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.LastName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.DOB)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Gender)
+            </th>
+            <th>
+                @Html.DisplayName("Reporting Person")
+            </th>
+            <th>Actions</th>
         </tr>
-
-    }
+    </thead>
+    <tbody>
+    </tbody>
 </table>
 
 <div class="modal" tabindex="-1" id="myModal" data-bs-backdrop="static">
@@ -109,4 +61,38 @@
 
 @section Scripts {
     @Scripts.Render("~/bundles/jqueryval")
+
+    <script>
+        $(document).ready(function () {
+            $("#empListTable").DataTable({
+                "serverSide": true,
+                "processing": true,
+                "ajax": {
+                    "url": "/Director/EmployeeList",
+                    "type": "post",
+                    "datatype": "json"
+                },
+                "columns": [
+                    {
+                        "data": null,
+                        "render": function (data, type, row, meta) {
+                            return '<div class="btn showTask" data-empId="' + row.EmployeeId + '"><i class="fas fa-arrow-down"></i><p>' + row.EmployeeCode + '</p><div>';
+                        }
+                    },
+                    { "data": "Email" },
+                    { "data": "FirstName" },
+                    { "data": "LastName" },
+                    { "data": "DOB" },
+                    { "data": "Gender" },
+                    { "data": "ReportingPerson"},
+                    {
+                        "data": null,
+                        "render": function (data, type, row, meta) {
+                            return '<p class="rounded-pill btn-sm btn border">Currect letter</p>'
+                        }
+                    },
+                ]
+            });
+        })
+    </script>
 }

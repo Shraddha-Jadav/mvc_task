@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
 
@@ -41,22 +42,28 @@ namespace mvc_task.Controllers
         {
             var id = (int)Session["EmpId"];
             var empObj = _dbContext.Employees.FirstOrDefault(m => m.EmployeeId == id);
-
             if (empObj != null)
             {
                 empObj.FirstName = employee.FirstName;
                 empObj.LastName = employee.LastName;
                 empObj.DOB = employee.DOB;
                 empObj.Gender = employee.Gender;
-
                 Session["Name"] = employee.FirstName;
                 _dbContext.Entry(empObj).State = EntityState.Modified;
-                TempData["AlertMessage"] = "Edit Details Sucessfully...";
-                _dbContext.Configuration.ValidateOnSaveEnabled = false;
                 _dbContext.SaveChanges();
-                _dbContext.Configuration.ValidateOnSaveEnabled = true;
+
+                var employeeDetail = new
+                {
+                    FirstName = empObj.FirstName,
+                    LastName = empObj.LastName,
+                    DOB = empObj.DOB,
+                    Gender = empObj.Gender
+                };
+
+                return Json(new { success = true, employee = employeeDetail });
             }
-            return RedirectToAction("ShowEmpDetails");
+            return Json(new { success = false, error = "Employee not found" });
         }
+
     }
 }

@@ -172,6 +172,8 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Error\404.html" />
+    <Content Include="Error\500.html" />
     <Content Include="Content\bootstrap-grid.css" />
     <Content Include="Content\bootstrap-grid.min.css" />
     <Content Include="Content\bootstrap-grid.rtl.css" />

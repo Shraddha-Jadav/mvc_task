@@ -115,6 +115,7 @@ namespace mvc_task.Controllers
                         (t.ModifiedOn.HasValue && t.ModifiedOn.Value.ToString("yyyy-MM-dd").Contains(searchValue))
                     ).ToList();
                 }
+                
                 var recordsTotal = tasks.Count();
 
                 if (model.order != null && model.order.Count > 0)

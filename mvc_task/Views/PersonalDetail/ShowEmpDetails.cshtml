@@ -31,25 +31,25 @@
                         <dt>
                             @Html.DisplayNameFor(model => model.FirstName)
                         </dt>
-                        <dd>
+                        <dd id = "firstName">
                             @Html.DisplayFor(model => model.FirstName)
                         </dd>
                         <dt>
                             @Html.DisplayNameFor(model => model.LastName)
                         </dt>
-                        <dd>
+                        <dd id = "lastName">
                             @Html.DisplayFor(model => model.LastName)
                         </dd>
                         <dt>
                             @Html.DisplayNameFor(model => model.DOB)
                         </dt>
-                        <dd>
+                        <dd id = "dob">
                             @Html.DisplayFor(model => model.DOB)
                         </dd>
                         <dt>
                             @Html.DisplayNameFor(model => model.Gender)
                         </dt>
-                        <dd>
+                        <dd id="gender">
                             @{
                                 string gender = Model.Gender == "F" ? "Female" : "Male";
                             }
@@ -79,9 +79,9 @@
         <div class="modal-content">
             <div class="modal-header">
                 <h2 class="modal-title">Detail</h2>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                <button type="button" class="btn-close btn border-0" data-bs-dismiss="modal" aria-label="Close">X</button>
             </div>
-            <div class="modal-body">
+            <div class="modal-body editPerDetail-modal-body">
 
             </div>
         </div>
