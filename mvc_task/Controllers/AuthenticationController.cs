@@ -1,10 +1,6 @@
-﻿using Antlr.Runtime.Tree;
-using Microsoft.Ajax.Utilities;
-using mvc_task.Models;
+﻿using mvc_task.Models;
 using System;
-using System.Collections.Generic;
 using System.Data.Entity;
-using System.Data.Entity.Validation;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
@@ -23,6 +19,7 @@ namespace mvc_task.Controllers
             _dbContext = new shraddha_crmEntities2();
         }
 
+        //------------------------------------------SignUp-----------------------------------------
         public ActionResult Register()
         {
             return View();
@@ -35,7 +32,11 @@ namespace mvc_task.Controllers
             bool existingEmp = _dbContext.Employees.Any(u => u.Email == employee.Email);
             if (existingEmp)
             {
-                ModelState.AddModelError("Email", "Email already exists. Please enter another email address.");
+                ModelState.AddModelError("Email", "Email already exists. Please enter another email.");
+            }
+            if(employee.Password != employee.RepeatPassword)
+            {
+                ModelState.AddModelError("RepeatPassword", "Password and Confirm password are not same!!");
             }
 
             ModelState.Remove("DepartmentId");
@@ -50,10 +51,14 @@ namespace mvc_task.Controllers
                 TempData["AlertMessage"] = "Register sucessfully...";
                 return RedirectToAction("login");
             }
-            ModelState.AddModelError("", "Somthing went wrong");
-            return View(employee);
+            else
+            {
+                ModelState.AddModelError("", "Somthing went wrong");
+                return View(employee);
+            }
         }
 
+        //---------------------------------------------Sign In--------------------------------------
         public ActionResult Login()
         {
             return View();
@@ -71,20 +76,29 @@ namespace mvc_task.Controllers
 
                 if (obj != null)
                 {
+                    var token = JwtHelper.GenerateToken(obj.EmployeeId, obj.Email);
+                    var cookie = new HttpCookie("jwt", token)
+                    {
+                        Expires = DateTime.Now.AddHours(2)
+                    };
+
+                    Response.Cookies.Add(cookie);
+
+                    Session["LoginId"] = obj.Email;
                     Session["EmpId"] = obj.EmployeeId;
                     Session["Name"] = obj.FirstName;
                     Session["Department"] = obj.DepartmentId;
                     FormsAuthentication.SetAuthCookie(obj.Email, false);
-                    TempData["AlertMessage"] = "Login sucessfully...";
-                    if ((int)Session["Department"] == 1)
+
+                    if (obj.DepartmentId == 1)
                     {
                         return RedirectToAction("AllTasks", "Task");
                     }
-                    else if ((int)Session["Department"] == 2)
+                    else if (obj.DepartmentId == 2)
                     {
                         return RedirectToAction("Index", "Manager");
                     }
-                    else if ((int)Session["Department"] == 3)
+                    else if (obj.DepartmentId == 3)
                     {
                         return RedirectToAction("Index", "Director");
                     }
@@ -94,13 +108,11 @@ namespace mvc_task.Controllers
                         return View();
                     }
                 }
-                else
-                {
-                    ModelState.AddModelError("", "Invalid email or password. Please try again.");
-                    return View(employee);
-                }
+
+                ModelState.AddModelError("", "Invalid username or password");
+                return View(employee);
             }
-            catch (Exception ex)
+            catch
             {
                 ModelState.AddModelError("", "An error occurred while attempting to login. Please try again later.");
                 return View(employee);
@@ -144,6 +156,15 @@ namespace mvc_task.Controllers
         {
             Session.Clear();
             FormsAuthentication.SignOut();
+            if (Request.Cookies["ASP.NET_SessionId"] != null)
+            {
+                var sessionCookie = new HttpCookie("ASP.NET_SessionId")
+                {
+                    Expires = DateTime.Now.AddDays(-1),
+                    Path = "/"
+                };
+                Response.Cookies.Add(sessionCookie);
+            }
             TempData["AlertMessage"] = "Logout Sucessfully...";
             return RedirectToAction("Login");
         }

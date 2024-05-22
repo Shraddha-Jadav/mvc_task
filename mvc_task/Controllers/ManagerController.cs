@@ -1,4 +1,5 @@
-﻿using mvc_task.Models;
+﻿using mvc_task.Filter;
+using mvc_task.Models;
 using System;
 using System.Collections.Generic;
 using System.Data.Entity;
@@ -8,7 +9,7 @@ using System.Web.Mvc;
 
 namespace mvc_task.Controllers
 {
-    [Authorize(Roles = "Manager")]
+    [RoleAuthorize("Manager")]
     public class ManagerController : Controller
     {
         private shraddha_crmEntities2 _dbContext;

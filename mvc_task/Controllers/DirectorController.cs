@@ -1,5 +1,6 @@
 ﻿
 using mvc_task.CustomeModel;
+using mvc_task.Filter;
 using mvc_task.Models;
 using Newtonsoft.Json;
 using System;
@@ -14,7 +15,7 @@ using System.Web.UI.WebControls;
 
 namespace mvc_task.Controllers
 {
-    [Authorize(Roles = "Director")]
+    [RoleAuthorize("Director")]
     public class DirectorController : Controller
     {
         private shraddha_crmEntities2 _dbContext;
@@ -59,6 +60,7 @@ namespace mvc_task.Controllers
                                   TaskDescription = t.TaskDescription
                               })
                               .ToList();
+
                 //var tasks = _dbContext.Tasks.Where(x => x.EmployeeId == empId).ToList();
                 return Json(new { success = true, tasks = tasks });
             }

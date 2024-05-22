@@ -10,6 +10,7 @@ namespace mvc_task.Models
     [MetadataType(typeof(EmployeeMetaData))]
     public partial class Employee
     {
+        public string RepeatPassword { get; set; }
         internal class EmployeeMetaData
         {
             [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
@@ -29,6 +30,10 @@ namespace mvc_task.Models
             [DataType(DataType.Password)]
             //[RegularExpression("^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&]{8,}$", ErrorMessageResourceName = "PassError", ErrorMessageResourceType = typeof(StringResources))]
             public string Password { get; set; }
+
+            [Required(ErrorMessageResourceName = "RequiredError", ErrorMessageResourceType = typeof(StringResources))]
+            [DataType(DataType.Password)]
+            public string RepeatPassword {  get; set; }
 
             [Display(Name = "FName", ResourceType = typeof(StringResources))]
             [Required(ErrorMessageResourceName = "RequiredError", ErrorMessageResourceType = typeof(StringResources))]
@@ -64,24 +69,6 @@ namespace mvc_task.Models
             public virtual ICollection<Task> Tasks1 { get; set; }
             [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
             public virtual ICollection<Task> Tasks2 { get; set; }
-        }
-
-        public class UniqueEmailAttribute : ValidationAttribute
-        {
-            protected override ValidationResult IsValid(object value, ValidationContext validationContext)
-            {
-                var dbContext = new shraddha_crmEntities2();
-                var email = value.ToString();
-                var existingEmployee = dbContext.Employees.FirstOrDefault(e => e.Email == email);
-
-                if (existingEmployee != null)
-                {
-                    ErrorMessage = ErrorMessage ?? "Email already exists. Please enter another email address.";
-                    return new ValidationResult(ErrorMessage);
-                }
-
-                return ValidationResult.Success;
-            }
         }
 
         public IList<SelectListItem> DepartmentNames { get; set; }

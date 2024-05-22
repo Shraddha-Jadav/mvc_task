@@ -1,4 +1,5 @@
-﻿using mvc_task.Models;
+﻿using mvc_task.Filter;
+using mvc_task.Models;
 using System;
 using System.Collections.Generic;
 using System.Data.Entity;
@@ -9,7 +10,7 @@ using System.Web.Mvc;
 
 namespace mvc_task.Controllers
 {
-    [Authorize(Roles = "Director, Manager, Employee")]
+    [RoleAuthorize("Director" , "Manager", "Employee")]
     public class PersonalDetailController : Controller
     {
         private shraddha_crmEntities2 _dbContext;
@@ -50,6 +51,7 @@ namespace mvc_task.Controllers
                 empObj.Gender = employee.Gender;
                 Session["Name"] = employee.FirstName;
                 _dbContext.Entry(empObj).State = EntityState.Modified;
+                ModelState.Remove(employee.RepeatPassword);
                 _dbContext.SaveChanges();
 
                 var employeeDetail = new

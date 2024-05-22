@@ -1,4 +1,5 @@
 ﻿using mvc_task.CustomeModel;
+using mvc_task.Filter;
 using mvc_task.Models;
 using Newtonsoft.Json;
 using System;
@@ -13,7 +14,7 @@ using System.Web.Mvc;
 
 namespace mvc_task.Controllers
 {
-    [Authorize (Roles = "Employee, Manager")]
+    [RoleAuthorize("Employee", "Manager")]
     public class TaskController : Controller
     {
         private shraddha_crmEntities2 _dbContext;
@@ -23,12 +24,13 @@ namespace mvc_task.Controllers
             _dbContext = new shraddha_crmEntities2();
         }
 
+        [JwtAuthentication]
         public ActionResult AllTasks()
         {
             return View();
         }
 
-        public ActionResult AddTask(int id) //Action for open partial view for add or update task
+        public ActionResult AddTask(int id)
         {
             if (id == 0)
             {
@@ -115,7 +117,7 @@ namespace mvc_task.Controllers
                         (t.ModifiedOn.HasValue && t.ModifiedOn.Value.ToString("yyyy-MM-dd").Contains(searchValue))
                     ).ToList();
                 }
-                
+
                 var recordsTotal = tasks.Count();
 
                 if (model.order != null && model.order.Count > 0)

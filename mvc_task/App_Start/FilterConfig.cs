@@ -1,4 +1,5 @@
-﻿using System.Web;
+﻿using mvc_task.CustomeModel;
+using System.Web;
 using System.Web.Mvc;
 
 namespace mvc_task

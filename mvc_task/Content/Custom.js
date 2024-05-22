@@ -1,5 +1,4 @@
-﻿
-//open model and get data for add or update task
+﻿//open model and get data for add or update task
 $(document).ready(function () {
     $(document).on('click', '.AddTask', function () {
         var id = $(this).data('id');
@@ -84,7 +83,6 @@ $(document).ready(function () {
             }
         });
     });
-
 
     //edit personal detail of employee/Manager by director
     $(document).on('click', '.editUserDetail', function () {

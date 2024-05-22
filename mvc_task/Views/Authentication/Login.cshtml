@@ -14,8 +14,8 @@
     </div>
     <script>
         function hideAlert() {
-            $("#alertMessage").fadeOut("slow"); @TempData.Remove("AlertMessage")
-            @TempData.Remove("AlertMessage")
+            $("#alertMessage").fadeOut("slow");
+            @TempData.Remove("AlertMessage");
         }
         setTimeout(hideAlert, 1000);
     </script>
@@ -84,14 +84,14 @@
                                             @Html.EditorFor(model => model.Password, new { htmlAttributes = new { @class = "form-control form-control-user", @type = "password", placeholder = "Password" } })
                                             @Html.ValidationMessageFor(model => model.Password, "", new { @class = "text-danger" })
                                         </div>
-                                        <div class="form-group">
+                                        @*<div class="form-group">
                                             <div class="custom-control custom-checkbox small">
                                                 <input type="checkbox" class="custom-control-input" id="customCheck">
                                                 <label class="custom-control-label" for="customCheck">
                                                     Remember Me
                                                 </label>
                                             </div>
-                                        </div>
+                                        </div>*@
                                         <input type="submit" value="Login" class="btn btn-primary btn-user btn-block" />
                                         <hr>
                                     }
